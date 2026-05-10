@@ -910,6 +910,7 @@ export interface IOverlayOptions {
 	backdropParent?: string | HTMLElement | Document;
 	backdropExtraClasses?: string | null;
 	moveOverlayToBody?: number | null;
+	isToggleClassesImmediately?: boolean;
 }
 export interface IOverlay {
 	options?: IOverlayOptions;
@@ -933,6 +934,8 @@ export declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private readonly backdropParent;
 	private readonly backdropExtraClasses;
 	private readonly animationTarget;
+	private readonly isScrollInsideViewport;
+	private onScrollInsideViewportClickListener;
 	private openNextOverlay;
 	private autoHide;
 	private toggleButtons;
@@ -949,6 +952,7 @@ export declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	autoClose: number | null;
 	autoCloseEqualityType: TOverlayOptionsAutoCloseEqualityType | null;
 	moveOverlayToBody: number | null;
+	isToggleClassesImmediately: boolean;
 	private backdrop;
 	private initialZIndex;
 	static currentZIndex: number;
@@ -1065,6 +1069,8 @@ export declare class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> imp
 	private buildHandleIcon;
 	private updateCurrentValue;
 	destroy(): void;
+	private static readonly unavailableMessage;
+	private static isAvailable;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 }
@@ -1149,6 +1155,7 @@ export declare class HSScrollspy extends HSBasePlugin<IScrollspyOptions> impleme
 	private isScrollingDown;
 	private lastScrollTop;
 	private onScrollableScrollListener;
+	private onPopstateListener;
 	private onLinkClickListener;
 	constructor(el: HTMLElement, options?: {});
 	private scrollableScroll;
@@ -1156,6 +1163,7 @@ export declare class HSScrollspy extends HSBasePlugin<IScrollspyOptions> impleme
 	private determineScrollDirection;
 	private linkClick;
 	private update;
+	private handlePopstate;
 	private scrollTo;
 	destroy(): void;
 	static getInstance(target: HTMLElement, isInstance?: boolean): any;
@@ -1253,6 +1261,7 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private lastQuery;
 	private readonly apiPageStart?;
 	private readonly apiTotalPath?;
+	private isLoadEventFired;
 	private optionId;
 	private onWrapperClickListener;
 	private onToggleClickListener;
@@ -1275,6 +1284,7 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private hasValue;
 	private init;
 	private build;
+	private fireLoadEvent;
 	private setOptions;
 	private buildWrapper;
 	private buildExtraMarkup;
@@ -1292,6 +1302,14 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private setupInfiniteScroll;
 	private handleScroll;
 	private loadMore;
+	/**
+	 * Positions the dropdown using Floating UI when `dropdownScope` is set to `"window"`.
+	 *
+	 * Requires `@floating-ui/dom` to be loaded on the page (e.g. via CDN or npm).
+	 * Used by: `dropdownScope: "window"`, `dropdownPlacement`, `dropdownAutoPlacement`.
+	 *
+	 * @see https://floating-ui.com
+	 */
 	private buildFloatingUI;
 	private updateDropdownWidth;
 	private buildSearch;

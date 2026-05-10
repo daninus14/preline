@@ -1,6 +1,6 @@
 /*
  * HSRemoveElement
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -15,7 +15,10 @@ import {
 
 import HSBasePlugin from '../base-plugin';
 
-class HSRemoveElement extends HSBasePlugin<IRemoveElementOptions> implements IRemoveElement {
+class HSRemoveElement
+	extends HSBasePlugin<IRemoveElementOptions>
+	implements IRemoveElement
+{
 	private readonly removeTargetId: string | null;
 	private readonly removeTarget: HTMLElement | null;
 	private readonly removeTargetAnimationClass: string;
@@ -81,13 +84,13 @@ class HSRemoveElement extends HSBasePlugin<IRemoveElementOptions> implements IRe
 		const elInCollection = window.$hsRemoveElementCollection.find(
 			(el) =>
 				el.element.el ===
-				(typeof target === 'string'
-					? document.querySelector(target)
-					: target) ||
+					(typeof target === 'string'
+						? document.querySelector(target)
+						: target) ||
 				el.element.el ===
-				(typeof target === 'string'
-					? document.querySelector(target)
-					: target),
+					(typeof target === 'string'
+						? document.querySelector(target)
+						: target),
 		);
 
 		return elInCollection

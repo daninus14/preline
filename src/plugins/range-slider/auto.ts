@@ -1,9 +1,9 @@
-import HSRangeSlider from "./core";
+import HSRangeSlider from './core';
 
-window.addEventListener("load", () => {
-  HSRangeSlider.autoInit();
+window.addEventListener('load', () => {
+	HSRangeSlider.autoInit();
 });
 
-if (typeof window !== "undefined") {
-  window.HSRangeSlider = HSRangeSlider;
+if (typeof window !== 'undefined') {
+	window.HSRangeSlider = HSRangeSlider;
 }

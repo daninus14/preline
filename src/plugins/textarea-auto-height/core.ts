@@ -1,6 +1,6 @@
 /*
  * HSTextareaAutoHeight
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -12,9 +12,12 @@ import {
 } from '../textarea-auto-height/interfaces';
 
 import HSBasePlugin from '../base-plugin';
-import { ITabsOnChangePayload } from '../tabs/interfaces'
+import { ITabsOnChangePayload } from '../tabs/interfaces';
 
-class HSTextareaAutoHeight extends HSBasePlugin<ITextareaAutoHeightOptions> implements ITextareaAutoHeight {
+class HSTextareaAutoHeight
+	extends HSBasePlugin<ITextareaAutoHeightOptions>
+	implements ITextareaAutoHeight
+{
 	private readonly defaultHeight: number;
 
 	private onElementInputListener: () => void;
@@ -100,10 +103,16 @@ class HSTextareaAutoHeight extends HSBasePlugin<ITextareaAutoHeightOptions> impl
 				this.textareaSetHeight(3);
 			});
 		} else if (this.parentType() === 'overlay') {
-			const overlay = (window.HSOverlay as any).getInstance(this.el.closest('.hs-overlay'), true);
+			const overlay = (window.HSOverlay as any).getInstance(
+				this.el.closest('.hs-overlay'),
+				true,
+			);
 
 			overlay.element.on('open', () => {
-				const collection = window.$hsTextareaAutoHeightCollection.filter(({ element }) => element.el.closest('.hs-overlay') === overlay.element.el);
+				const collection = window.$hsTextareaAutoHeightCollection.filter(
+					({ element }) =>
+						element.el.closest('.hs-overlay') === overlay.element.el,
+				);
 
 				collection.forEach(({ element }) => element.textareaSetHeight(3));
 			});
@@ -111,15 +120,19 @@ class HSTextareaAutoHeight extends HSBasePlugin<ITextareaAutoHeightOptions> impl
 			const tabId = this.el.closest('[role="tabpanel"]')?.id;
 			const tab = document.querySelector(`[data-hs-tab="#${tabId}"]`);
 			const tabs = tab.closest('[role="tablist"]');
-			const { element } = (window.HSTabs as any).getInstance(tabs, true) || null;
+			const { element } =
+				(window.HSTabs as any).getInstance(tabs, true) || null;
 
 			element.on('change', (payload: ITabsOnChangePayload) => {
-				const textareas = document.querySelectorAll(`${payload.current} [data-hs-textarea-auto-height]`);
+				const textareas = document.querySelectorAll(
+					`${payload.current} [data-hs-textarea-auto-height]`,
+				);
 
 				if (!textareas.length) return false;
 
 				textareas.forEach((el: HTMLTextAreaElement) => {
-					const instance = (window.HSTextareaAutoHeight as any).getInstance(el, true) || null;
+					const instance =
+						(window.HSTextareaAutoHeight as any).getInstance(el, true) || null;
 
 					if (instance) instance.element.textareaSetHeight(3);
 				});

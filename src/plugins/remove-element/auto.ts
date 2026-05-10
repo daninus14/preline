@@ -1,9 +1,9 @@
-import HSRemoveElement from "./core";
+import HSRemoveElement from './core';
 
 window.addEventListener('load', () => {
-  HSRemoveElement.autoInit();
+	HSRemoveElement.autoInit();
 });
 
 if (typeof window !== 'undefined') {
-  window.HSRemoveElement = HSRemoveElement;
+	window.HSRemoveElement = HSRemoveElement;
 }

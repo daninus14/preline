@@ -1,6 +1,6 @@
 /*
  * HSDataTable
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -10,13 +10,20 @@ import { Api } from 'datatables.net';
 
 import { debounce, htmlToElement, classToClassList } from '../../utils';
 
-import { IDataTableOptions, IDataTable, IColumnDef } from '../datatable/interfaces';
+import {
+	IDataTableOptions,
+	IDataTable,
+	IColumnDef,
+} from '../datatable/interfaces';
 
 import HSBasePlugin from '../base-plugin';
 
 declare var DataTable: any;
 
-class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable {
+class HSDataTable
+	extends HSBasePlugin<IDataTableOptions>
+	implements IDataTable
+{
 	private concatOptions: IDataTableOptions;
 
 	private dataTable: Api<any>;
@@ -42,26 +49,36 @@ class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable 
 	private isRowSelecting: boolean;
 	private readonly pageBtnClasses: string | null;
 
-	private onSearchInputListener: {
-		el: Element;
-		fn: (evt: InputEvent) => void;
-	}[] | null;
-	private onPageEntitiesChangeListener: {
-		el: Element;
-		fn: (evt: InputEvent) => void;
-	}[] | null;
-	private onSinglePagingClickListener: {
-		el: Element;
-		fn: () => void;
-	}[] | null;
-	private onPagingPrevClickListener: {
-		el: Element;
-		fn: () => void;
-	}[] | null;
-	private onPagingNextClickListener: {
-		el: Element;
-		fn: () => void;
-	}[] | null;
+	private onSearchInputListener:
+		| {
+				el: Element;
+				fn: (evt: InputEvent) => void;
+		  }[]
+		| null;
+	private onPageEntitiesChangeListener:
+		| {
+				el: Element;
+				fn: (evt: InputEvent) => void;
+		  }[]
+		| null;
+	private onSinglePagingClickListener:
+		| {
+				el: Element;
+				fn: () => void;
+		  }[]
+		| null;
+	private onPagingPrevClickListener:
+		| {
+				el: Element;
+				fn: () => void;
+		  }[]
+		| null;
+	private onPagingNextClickListener:
+		| {
+				el: Element;
+				fn: () => void;
+		  }[]
+		| null;
 	private onRowSelectingAllChangeListener: () => void;
 
 	constructor(el: HTMLElement, options?: IDataTableOptions, events?: {}) {
@@ -95,23 +112,38 @@ class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable 
 
 		this.table = this.el.querySelector('table');
 
-		this.searches = Array.from(this.el.querySelectorAll('[data-hs-datatable-search]')) ?? null;
+		this.searches =
+			Array.from(this.el.querySelectorAll('[data-hs-datatable-search]')) ??
+			null;
 
-		this.pageEntitiesList = Array.from(this.el.querySelectorAll('[data-hs-datatable-page-entities]')) ?? null;
+		this.pageEntitiesList =
+			Array.from(
+				this.el.querySelectorAll('[data-hs-datatable-page-entities]'),
+			) ?? null;
 
-		this.pagingList = Array.from(this.el.querySelectorAll('[data-hs-datatable-paging]')) ?? null;
-		this.pagingPagesList = Array.from(this.el.querySelectorAll('[data-hs-datatable-paging-pages]')) ?? null;
-		this.pagingPrevList = Array.from(this.el.querySelectorAll('[data-hs-datatable-paging-prev]')) ?? null;
-		this.pagingNextList = Array.from(this.el.querySelectorAll('[data-hs-datatable-paging-next]')) ?? null;
+		this.pagingList =
+			Array.from(this.el.querySelectorAll('[data-hs-datatable-paging]')) ??
+			null;
+		this.pagingPagesList =
+			Array.from(
+				this.el.querySelectorAll('[data-hs-datatable-paging-pages]'),
+			) ?? null;
+		this.pagingPrevList =
+			Array.from(this.el.querySelectorAll('[data-hs-datatable-paging-prev]')) ??
+			null;
+		this.pagingNextList =
+			Array.from(this.el.querySelectorAll('[data-hs-datatable-paging-next]')) ??
+			null;
 
-		this.infoList = Array.from(this.el.querySelectorAll('[data-hs-datatable-info]')) ?? null;
+		this.infoList =
+			Array.from(this.el.querySelectorAll('[data-hs-datatable-info]')) ?? null;
 
 		if (this.concatOptions?.rowSelectingOptions)
 			this.rowSelectingAll =
 				(this.concatOptions?.rowSelectingOptions?.selectAllSelector
 					? document.querySelector(
-						this.concatOptions?.rowSelectingOptions?.selectAllSelector,
-					)
+							this.concatOptions?.rowSelectingOptions?.selectAllSelector,
+						)
 					: document.querySelector('[data-hs-datatable-row-selecting-all]')) ??
 				null;
 		if (this.concatOptions?.rowSelectingOptions)
@@ -119,11 +151,13 @@ class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable 
 				this.concatOptions?.rowSelectingOptions?.individualSelector ??
 				'[data-hs-datatable-row-selecting-individual]';
 
-		if (this.pageEntitiesList.length) this.concatOptions.pageLength = parseInt(this.pageEntitiesList[0].value);
+		if (this.pageEntitiesList.length)
+			this.concatOptions.pageLength = parseInt(this.pageEntitiesList[0].value);
 
 		this.maxPagesToShow = 3;
 		this.isRowSelecting = !!this.concatOptions?.rowSelectingOptions;
-		this.pageBtnClasses = this.concatOptions?.pagingOptions?.pageBtnClasses ?? null;
+		this.pageBtnClasses =
+			this.concatOptions?.pagingOptions?.pageBtnClasses ?? null;
 
 		this.onSearchInputListener = [];
 		this.onPageEntitiesChangeListener = [];
@@ -171,7 +205,10 @@ class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable 
 	}
 
 	private pageEntitiesChange(evt: Event) {
-		this.onEntitiesChange(parseInt((evt.target as HTMLSelectElement).value), evt.target as HTMLSelectElement);
+		this.onEntitiesChange(
+			parseInt((evt.target as HTMLSelectElement).value),
+			evt.target as HTMLSelectElement,
+		);
 	}
 
 	private pagingPrevClick() {
@@ -198,7 +235,10 @@ class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable 
 				fn: debounce((evt: InputEvent) => this.searchInput(evt)),
 			});
 
-			el.addEventListener('input', this.onSearchInputListener.find((search) => search.el === el).fn);
+			el.addEventListener(
+				'input',
+				this.onSearchInputListener.find((search) => search.el === el).fn,
+			);
 		});
 	}
 
@@ -214,14 +254,20 @@ class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable 
 				fn: (evt) => this.pageEntitiesChange(evt),
 			});
 
-			el.addEventListener('change', this.onPageEntitiesChangeListener.find((pageEntity) => pageEntity.el === el).fn);
+			el.addEventListener(
+				'change',
+				this.onPageEntitiesChangeListener.find(
+					(pageEntity) => pageEntity.el === el,
+				).fn,
+			);
 		});
 	}
 
 	private onEntitiesChange(entities: number, target: HTMLSelectElement) {
 		const otherEntities = this.pageEntitiesList.filter((el) => el !== target);
 
-		if (otherEntities.length) otherEntities.forEach((el) => {
+		if (otherEntities.length)
+			otherEntities.forEach((el) => {
 				if (window.HSSelect) {
 					// @ts-ignore
 					const hsSelectInstance = window.HSSelect.getInstance(el, true);
@@ -244,21 +290,26 @@ class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable 
 	}
 
 	private initInfoFrom(el: HTMLElement) {
-		const infoFrom = el.querySelector('[data-hs-datatable-info-from]') as HTMLElement ?? null;
+		const infoFrom =
+			(el.querySelector('[data-hs-datatable-info-from]') as HTMLElement) ??
+			null;
 		const { start } = this.dataTable.page.info();
 
 		if (infoFrom) infoFrom.innerText = `${start + 1}`;
 	}
 
 	private initInfoTo(el: HTMLElement) {
-		const infoTo = el.querySelector('[data-hs-datatable-info-to]') as HTMLElement ?? null;
+		const infoTo =
+			(el.querySelector('[data-hs-datatable-info-to]') as HTMLElement) ?? null;
 		const { end } = this.dataTable.page.info();
 
 		if (infoTo) infoTo.innerText = `${end}`;
 	}
 
 	private initInfoLength(el: HTMLElement) {
-		const infoLength = el.querySelector('[data-hs-datatable-info-length]') as HTMLElement ?? null;
+		const infoLength =
+			(el.querySelector('[data-hs-datatable-info-length]') as HTMLElement) ??
+			null;
 		const { recordsTotal } = this.dataTable.page.info();
 
 		if (infoLength) infoLength.innerText = `${recordsTotal}`;
@@ -292,7 +343,12 @@ class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable 
 				fn: () => this.pagingPrevClick(),
 			});
 
-			el.addEventListener('click', this.onPagingPrevClickListener.find((pagingPrev) => pagingPrev.el === el).fn);
+			el.addEventListener(
+				'click',
+				this.onPagingPrevClickListener.find(
+					(pagingPrev) => pagingPrev.el === el,
+				).fn,
+			);
 		});
 	}
 
@@ -317,7 +373,12 @@ class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable 
 				fn: () => this.pagingNextClick(),
 			});
 
-			el.addEventListener('click', this.onPagingNextClickListener.find((pagingNext) => pagingNext.el === el).fn);
+			el.addEventListener(
+				'click',
+				this.onPagingNextClickListener.find(
+					(pagingNext) => pagingNext.el === el,
+				).fn,
+			);
 		});
 	}
 
@@ -335,7 +396,10 @@ class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable 
 		const totalPages = Math.ceil(totalRecords / length);
 		const currentPage = page + 1;
 
-		let startPage = Math.max(1, currentPage - Math.floor(this.maxPagesToShow / 2));
+		let startPage = Math.max(
+			1,
+			currentPage - Math.floor(this.maxPagesToShow / 2),
+		);
 		let endPage = Math.min(totalPages, startPage + (this.maxPagesToShow - 1));
 
 		if (endPage - startPage + 1 < this.maxPagesToShow) {
@@ -347,7 +411,10 @@ class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable 
 		if (startPage > 1) {
 			this.buildPagingPage(1, pagingPages);
 
-			if (startPage > 2) pagingPages.appendChild(htmlToElement(`<span class="ellipsis">...</span>`));
+			if (startPage > 2)
+				pagingPages.appendChild(
+					htmlToElement(`<span class="ellipsis">...</span>`),
+				);
 		}
 
 		for (let i = startPage; i <= endPage; i++) {
@@ -355,13 +422,20 @@ class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable 
 		}
 
 		if (endPage < totalPages) {
-			if (endPage < totalPages - 1) pagingPages.appendChild(htmlToElement(`<span class="ellipsis">...</span>`));
+			if (endPage < totalPages - 1)
+				pagingPages.appendChild(
+					htmlToElement(`<span class="ellipsis">...</span>`),
+				);
 
 			this.buildPagingPage(totalPages, pagingPages);
 		}
 
-		this.pagingPrevList.forEach((el) => this.disablePagingArrow(el, page === 0));
-		this.pagingNextList.forEach((el) => this.disablePagingArrow(el, page === pages - 1));
+		this.pagingPrevList.forEach((el) =>
+			this.disablePagingArrow(el, page === 0),
+		);
+		this.pagingNextList.forEach((el) =>
+			this.disablePagingArrow(el, page === pages - 1),
+		);
 
 		this.pagingList.forEach((el) => this.hidePagingIfSinglePage(el));
 	}
@@ -379,7 +453,12 @@ class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable 
 			fn: () => this.singlePagingClick(counter),
 		});
 
-		pageEl.addEventListener('click', this.onSinglePagingClickListener.find((singlePaging) => singlePaging.el === pageEl).fn);
+		pageEl.addEventListener(
+			'click',
+			this.onSinglePagingClickListener.find(
+				(singlePaging) => singlePaging.el === pageEl,
+			).fn,
+		);
 
 		target.append(pageEl);
 	}
@@ -460,18 +539,31 @@ class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable 
 	// Public methods
 	public destroy() {
 		if (this.searches) {
-			this.onSearchInputListener.forEach(({ el, fn }) => el.removeEventListener('click', fn));
+			this.onSearchInputListener.forEach(({ el, fn }) =>
+				el.removeEventListener('click', fn),
+			);
 
 			// this.searches = null;
 		}
-		if (this.pageEntitiesList) this.onPageEntitiesChangeListener.forEach(({ el, fn }) => el.removeEventListener('change', fn));
+		if (this.pageEntitiesList)
+			this.onPageEntitiesChangeListener.forEach(({ el, fn }) =>
+				el.removeEventListener('change', fn),
+			);
 		if (this.pagingPagesList.length) {
-			this.onSinglePagingClickListener.forEach(({ el, fn }) => el.removeEventListener('click', fn));
+			this.onSinglePagingClickListener.forEach(({ el, fn }) =>
+				el.removeEventListener('click', fn),
+			);
 
-			this.pagingPagesList.forEach((el) => el.innerHTML = '');
+			this.pagingPagesList.forEach((el) => (el.innerHTML = ''));
 		}
-		if (this.pagingPrevList.length) this.onPagingPrevClickListener.forEach(({ el, fn }) => el.removeEventListener('click', fn));
-		if (this.pagingNextList.length) this.onPagingNextClickListener.forEach(({ el, fn }) => el.removeEventListener('click', fn));
+		if (this.pagingPrevList.length)
+			this.onPagingPrevClickListener.forEach(({ el, fn }) =>
+				el.removeEventListener('click', fn),
+			);
+		if (this.pagingNextList.length)
+			this.onPagingNextClickListener.forEach(({ el, fn }) =>
+				el.removeEventListener('click', fn),
+			);
 		if (this.rowSelectingAll)
 			this.rowSelectingAll.removeEventListener(
 				'change',
@@ -483,7 +575,9 @@ class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable 
 		this.rowSelectingAll = null;
 		this.rowSelectingIndividual = null;
 
-		window.$hsDataTableCollection = window.$hsDataTableCollection.filter(({ element }) => element.el !== this.el);
+		window.$hsDataTableCollection = window.$hsDataTableCollection.filter(
+			({ element }) => element.el !== this.el,
+		);
 	}
 
 	// Static methods

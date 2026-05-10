@@ -6,6 +6,7 @@ export interface IOverlayOptions {
 	backdropParent?: string | HTMLElement | Document;
 	backdropExtraClasses?: string | null;
 	moveOverlayToBody?: number | null;
+	isToggleClassesImmediately?: boolean;
 }
 export interface IOverlay {
 	options?: IOverlayOptions;
@@ -43,6 +44,8 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private readonly backdropParent;
 	private readonly backdropExtraClasses;
 	private readonly animationTarget;
+	private readonly isScrollInsideViewport;
+	private onScrollInsideViewportClickListener;
 	private openNextOverlay;
 	private autoHide;
 	private toggleButtons;
@@ -59,6 +62,7 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	autoClose: number | null;
 	autoCloseEqualityType: TOverlayOptionsAutoCloseEqualityType | null;
 	moveOverlayToBody: number | null;
+	isToggleClassesImmediately: boolean;
 	private backdrop;
 	private initialZIndex;
 	static currentZIndex: number;

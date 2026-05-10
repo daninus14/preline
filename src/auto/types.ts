@@ -1,9 +1,9 @@
 export type TAutoInitPlugin = {
-  autoInit?: () => void;
+	autoInit?: () => void;
 };
 
 export type TCollectionItem = {
-  key: string;
-  fn: TAutoInitPlugin | null;
-  collection: string;
+	key: string;
+	fn: TAutoInitPlugin | null;
+	collection: string;
 };

@@ -1,9 +1,9 @@
-import HSTooltip from "./core";
+import HSTooltip from './core';
 
-window.addEventListener("load", () => {
-  HSTooltip.autoInit();
+window.addEventListener('load', () => {
+	HSTooltip.autoInit();
 });
 
-if (typeof window !== "undefined") {
-  window.HSTooltip = HSTooltip;
+if (typeof window !== 'undefined') {
+	window.HSTooltip = HSTooltip;
 }

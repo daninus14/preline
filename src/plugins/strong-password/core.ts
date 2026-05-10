@@ -1,6 +1,6 @@
 /*
  * HSStrongPassword
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -20,7 +20,10 @@ import {
 
 import HSBasePlugin from '../base-plugin';
 
-class HSStrongPassword extends HSBasePlugin<IStrongPasswordOptions> implements IStrongPassword {
+class HSStrongPassword
+	extends HSBasePlugin<IStrongPasswordOptions>
+	implements IStrongPassword
+{
 	private readonly target: string | HTMLInputElement | null;
 	private readonly hints: string | HTMLElement | null;
 	private readonly stripClasses: string | null;

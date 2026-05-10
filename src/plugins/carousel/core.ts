@@ -1,6 +1,6 @@
 /*
  * HSCarousel
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -659,8 +659,9 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 
 	private calculateWidth() {
 		if (!this.isSnap) {
-			this.inner.style.width = `${(this.sliderWidth * this.slides.length) / this.getCurrentSlidesQty()
-				}px`;
+			this.inner.style.width = `${
+				(this.sliderWidth * this.slides.length) / this.getCurrentSlidesQty()
+			}px`;
 		}
 
 		this.slides.forEach((el) => {
@@ -687,8 +688,8 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 		} else {
 			const maxIndex = this.isCentered
 				? this.currentIndex +
-				this.getCurrentSlidesQty() +
-				(this.getCurrentSlidesQty() - 1)
+					this.getCurrentSlidesQty() +
+					(this.getCurrentSlidesQty() - 1)
 				: this.currentIndex + this.getCurrentSlidesQty();
 
 			this.slides.forEach((el, i) => {
@@ -764,15 +765,15 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			statementNext =
 				currentIndex >= maxIndex &&
 				this.container.scrollLeft +
-				this.container.clientWidth +
-				(parseFloat(gapValue) || 0) >=
-				this.container.scrollWidth;
+					this.container.clientWidth +
+					(parseFloat(gapValue) || 0) >=
+					this.container.scrollWidth;
 		} else {
 			currentIndex = this.currentIndex;
 			maxIndex = this.isCentered
 				? this.slides.length -
-				this.getCurrentSlidesQty() +
-				(this.getCurrentSlidesQty() - 1)
+					this.getCurrentSlidesQty() +
+					(this.getCurrentSlidesQty() - 1)
 				: this.slides.length - this.getCurrentSlidesQty();
 			statementPrev = currentIndex === 0;
 			statementNext = currentIndex >= maxIndex;
@@ -855,8 +856,8 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			else if (
 				this.currentIndex >=
 				this.slides.length -
-				this.getCurrentSlidesQty() +
-				(this.getCurrentSlidesQty() - 1)
+					this.getCurrentSlidesQty() +
+					(this.getCurrentSlidesQty() - 1)
 			) {
 				const totalSlideWidth = this.slides.length * itemWidth;
 
@@ -867,8 +868,9 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 		if (!this.isSnap) this.setTransform(translateX);
 
 		if (this.isAutoHeight) {
-			this.inner.style.height = `${this.slides[this.currentIndex].clientHeight
-				}px`;
+			this.inner.style.height = `${
+				this.slides[this.currentIndex].clientHeight
+			}px`;
 		}
 
 		if (this.dotsItems) this.goToCurrentDot();
@@ -941,8 +943,8 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	public goToNext() {
 		const statement = this.isCentered
 			? this.slides.length -
-			this.getCurrentSlidesQty() +
-			(this.getCurrentSlidesQty() - 1)
+				this.getCurrentSlidesQty() +
+				(this.getCurrentSlidesQty() - 1)
 			: this.slides.length - this.getCurrentSlidesQty();
 
 		if (this.currentIndex < statement) {

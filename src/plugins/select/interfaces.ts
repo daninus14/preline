@@ -101,11 +101,7 @@ export interface ISelectOptions {
 	searchId?: string;
 	searchLimit?: number | typeof Infinity;
 	isSearchDirectMatch?: boolean;
-	searchMatchMode?:
-		| 'substring'
-		| 'chars-sequence'
-		| 'token-all'
-		| 'hybrid';
+	searchMatchMode?: 'substring' | 'chars-sequence' | 'token-all' | 'hybrid';
 	searchClasses?: string;
 	searchWrapperClasses?: string;
 	searchPlaceholder?: string;

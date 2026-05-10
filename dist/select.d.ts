@@ -222,6 +222,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private lastQuery;
 	private readonly apiPageStart?;
 	private readonly apiTotalPath?;
+	private isLoadEventFired;
 	private optionId;
 	private onWrapperClickListener;
 	private onToggleClickListener;
@@ -244,6 +245,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private hasValue;
 	private init;
 	private build;
+	private fireLoadEvent;
 	private setOptions;
 	private buildWrapper;
 	private buildExtraMarkup;
@@ -261,6 +263,14 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private setupInfiniteScroll;
 	private handleScroll;
 	private loadMore;
+	/**
+	 * Positions the dropdown using Floating UI when `dropdownScope` is set to `"window"`.
+	 *
+	 * Requires `@floating-ui/dom` to be loaded on the page (e.g. via CDN or npm).
+	 * Used by: `dropdownScope: "window"`, `dropdownPlacement`, `dropdownAutoPlacement`.
+	 *
+	 * @see https://floating-ui.com
+	 */
 	private buildFloatingUI;
 	private updateDropdownWidth;
 	private buildSearch;

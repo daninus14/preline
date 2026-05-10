@@ -1,9 +1,9 @@
-import HSTreeView from "./core";
+import HSTreeView from './core';
 
 window.addEventListener('load', () => {
-  HSTreeView.autoInit();
+	HSTreeView.autoInit();
 });
 
 if (typeof window !== 'undefined') {
-  window.HSTreeView = HSTreeView;
+	window.HSTreeView = HSTreeView;
 }

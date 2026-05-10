@@ -1,6 +1,6 @@
 /*
  * HSLayoutSplitter
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -17,7 +17,10 @@ import {
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';
 
-class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements ILayoutSplitter {
+class HSLayoutSplitter
+	extends HSBasePlugin<ILayoutSplitterOptions>
+	implements ILayoutSplitter
+{
 	static isListenersInitialized = false;
 	static isWindowListenersInitialized = false;
 
@@ -37,9 +40,9 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 
 	private onControlPointerDownListener:
 		| {
-			el: HTMLElement;
-			fn: () => void;
-		}[]
+				el: HTMLElement;
+				fn: () => void;
+		  }[]
 		| null;
 
 	constructor(el: HTMLElement, options?: ILayoutSplitterOptions) {
@@ -60,7 +63,8 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 			concatOptions?.verticalSplitterClasses || null;
 		this.verticalSplitterTemplate =
 			concatOptions?.verticalSplitterTemplate || '<div></div>';
-		this.isSplittersAddedManually = concatOptions?.isSplittersAddedManually ?? false;
+		this.isSplittersAddedManually =
+			concatOptions?.isSplittersAddedManually ?? false;
 
 		this.horizontalSplitters = [];
 		this.horizontalControls = [];
@@ -109,13 +113,13 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 			draggingInstance.element.onPointerMoveHandler(
 				evt,
 				activeSplitter,
-				'vertical'
+				'vertical',
 			);
 		else
 			draggingInstance.element.onPointerMoveHandler(
 				evt,
 				activeSplitter,
-				'horizontal'
+				'horizontal',
 			);
 	};
 
@@ -210,8 +214,17 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 
 			el.style.display = '';
 		} else {
-			el = htmlToElement(direction === 'horizontal' ? this.horizontalSplitterTemplate : this.verticalSplitterTemplate) as HTMLElement;
-			classToClassList(direction === 'horizontal' ? this.horizontalSplitterClasses : this.verticalSplitterClasses, el);
+			el = htmlToElement(
+				direction === 'horizontal'
+					? this.horizontalSplitterTemplate
+					: this.verticalSplitterTemplate,
+			) as HTMLElement;
+			classToClassList(
+				direction === 'horizontal'
+					? this.horizontalSplitterClasses
+					: this.verticalSplitterClasses,
+				el,
+			);
 			el.classList.add('hs-layout-splitter-control');
 		}
 
@@ -222,7 +235,8 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 
 		this.bindListeners(item);
 
-		if (next && !this.isSplittersAddedManually) prev.insertAdjacentElement('afterend', el);
+		if (next && !this.isSplittersAddedManually)
+			prev.insertAdjacentElement('afterend', el);
 	}
 
 	private getSplitterItemParsedParam(item: HTMLElement) {
@@ -232,10 +246,16 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 	}
 
 	private getContainerSize(container: Element, isHorizontal: boolean): number {
-		return isHorizontal ? container.getBoundingClientRect().width : container.getBoundingClientRect().height;
+		return isHorizontal
+			? container.getBoundingClientRect().width
+			: container.getBoundingClientRect().height;
 	}
 
-	private getMaxFlexSize(element: HTMLElement, param: string, totalWidth: number): number {
+	private getMaxFlexSize(
+		element: HTMLElement,
+		param: string,
+		totalWidth: number,
+	): number {
 		const paramValue = this.getSplitterItemSingleParam(element, param);
 
 		return typeof paramValue === 'number' ? (paramValue / 100) * totalWidth : 0;
@@ -277,15 +297,15 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 	private updateSplitterItemParam(item: HTMLElement, newSize: number) {
 		const param = this.getSplitterItemParsedParam(item);
 		const newSizeFixed = newSize.toFixed(1);
-		const newParam = typeof param === 'object' ? JSON.stringify({
-			...param,
-			dynamicSize: +newSizeFixed,
-		}) : newSizeFixed;
+		const newParam =
+			typeof param === 'object'
+				? JSON.stringify({
+						...param,
+						dynamicSize: +newSizeFixed,
+					})
+				: newSizeFixed;
 
-		item.setAttribute(
-			'data-hs-layout-splitter-item',
-			newParam,
-		);
+		item.setAttribute('data-hs-layout-splitter-item', newParam);
 	}
 
 	private onPointerDownHandler(item: IControlLayoutSplitter) {
@@ -304,20 +324,37 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 	private onPointerMoveHandler(
 		evt: PointerEvent,
 		item: IControlLayoutSplitter,
-		direction: 'horizontal' | 'vertical'
+		direction: 'horizontal' | 'vertical',
 	) {
 		const { prev, next } = item;
 		const container = item.el.closest(
 			direction === 'horizontal'
 				? '[data-hs-layout-splitter-horizontal-group]'
-				: '[data-hs-layout-splitter-vertical-group]'
+				: '[data-hs-layout-splitter-vertical-group]',
 		);
 		const isHorizontal = direction === 'horizontal';
 		const totalSize = this.getContainerSize(container, isHorizontal);
-		const availableSize = this.calculateAvailableSize(container, prev, next, isHorizontal, totalSize);
+		const availableSize = this.calculateAvailableSize(
+			container,
+			prev,
+			next,
+			isHorizontal,
+			totalSize,
+		);
 
-		const sizes = this.calculateResizedSizes(evt, prev, availableSize, isHorizontal);
-		const adjustedSizes = this.enforceLimits(sizes, prev, next, totalSize, availableSize);
+		const sizes = this.calculateResizedSizes(
+			evt,
+			prev,
+			availableSize,
+			isHorizontal,
+		);
+		const adjustedSizes = this.enforceLimits(
+			sizes,
+			prev,
+			next,
+			totalSize,
+			availableSize,
+		);
 
 		this.applySizes(prev, next, adjustedSizes, totalSize);
 	}
@@ -341,9 +378,11 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 		prev: HTMLElement,
 		next: HTMLElement,
 		isHorizontal: boolean,
-		totalSize: number
+		totalSize: number,
 	): number {
-		const items = container.querySelectorAll(':scope > [data-hs-layout-splitter-item]');
+		const items = container.querySelectorAll(
+			':scope > [data-hs-layout-splitter-item]',
+		);
 		const otherSize = Array.from(items).reduce((sum, item) => {
 			if (item === prev || item === next) return sum;
 
@@ -351,7 +390,14 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 			// TODO:: Test
 			const computedStyle = window.getComputedStyle(item);
 
-			return sum + (computedStyle.position === 'fixed' ? 0 : (isHorizontal ? rect.width : rect.height));
+			return (
+				sum +
+				(computedStyle.position === 'fixed'
+					? 0
+					: isHorizontal
+						? rect.width
+						: rect.height)
+			);
 		}, 0);
 
 		return totalSize - otherSize;
@@ -361,13 +407,21 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 		evt: PointerEvent,
 		prev: HTMLElement,
 		availableSize: number,
-		isHorizontal: boolean
+		isHorizontal: boolean,
 	): {
 		previousSize: number;
-		nextSize: number
+		nextSize: number;
 	} {
-		const prevStart = isHorizontal ? prev.getBoundingClientRect().left : prev.getBoundingClientRect().top;
-		let previousSize = Math.max(0, Math.min((isHorizontal ? evt.clientX : evt.clientY) - prevStart, availableSize));
+		const prevStart = isHorizontal
+			? prev.getBoundingClientRect().left
+			: prev.getBoundingClientRect().top;
+		let previousSize = Math.max(
+			0,
+			Math.min(
+				(isHorizontal ? evt.clientX : evt.clientY) - prevStart,
+				availableSize,
+			),
+		);
 		let nextSize = availableSize - previousSize;
 
 		return { previousSize, nextSize };
@@ -376,20 +430,28 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 	private enforceLimits(
 		sizes: {
 			previousSize: number;
-			nextSize: number
+			nextSize: number;
 		},
 		prev: HTMLElement,
 		next: HTMLElement,
 		totalSize: number,
-		availableSize: number
+		availableSize: number,
 	): {
 		previousSize: number;
 		nextSize: number;
 	} {
 		const prevMinSize = this.getMaxFlexSize(prev, 'minSize', totalSize);
 		const nextMinSize = this.getMaxFlexSize(next, 'minSize', totalSize);
-		const prevPreLimitSize = this.getMaxFlexSize(prev, 'preLimitSize', totalSize);
-		const nextPreLimitSize = this.getMaxFlexSize(next, 'preLimitSize', totalSize);
+		const prevPreLimitSize = this.getMaxFlexSize(
+			prev,
+			'preLimitSize',
+			totalSize,
+		);
+		const nextPreLimitSize = this.getMaxFlexSize(
+			next,
+			'preLimitSize',
+			totalSize,
+		);
 
 		let { previousSize, nextSize } = sizes;
 
@@ -419,13 +481,13 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 			static: {
 				prev: {
 					minSize: this.getSplitterItemSingleParam(prev, 'minSize'),
-					preLimitSize: this.getSplitterItemSingleParam(prev, 'preLimitSize')
+					preLimitSize: this.getSplitterItemSingleParam(prev, 'preLimitSize'),
 				},
 				next: {
 					minSize: this.getSplitterItemSingleParam(next, 'minSize'),
-					preLimitSize: this.getSplitterItemSingleParam(next, 'preLimitSize')
-				}
-			}
+					preLimitSize: this.getSplitterItemSingleParam(next, 'preLimitSize'),
+				},
+			},
 		};
 
 		if (nextSize < nextMinSize) {
@@ -456,9 +518,9 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 		next: HTMLElement,
 		sizes: {
 			previousSize: number;
-			nextSize: number
+			nextSize: number;
 		},
-		totalSize: number
+		totalSize: number,
 	) {
 		const { previousSize, nextSize } = sizes;
 
@@ -485,16 +547,23 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 	}
 
 	public getData(el: HTMLElement): any {
-		const container = el.closest('[data-hs-layout-splitter-horizontal-group], [data-hs-layout-splitter-vertical-group]');
+		const container = el.closest(
+			'[data-hs-layout-splitter-horizontal-group], [data-hs-layout-splitter-vertical-group]',
+		);
 
 		if (!container) {
-			throw new Error('Element is not inside a valid layout splitter container.');
+			throw new Error(
+				'Element is not inside a valid layout splitter container.',
+			);
 		}
 
-		const isHorizontal = container.matches('[data-hs-layout-splitter-horizontal-group]');
+		const isHorizontal = container.matches(
+			'[data-hs-layout-splitter-horizontal-group]',
+		);
 		const totalSize = this.getContainerSize(container, isHorizontal);
 
-		const dynamicFlexSize = this.getSplitterItemSingleParam(el, 'dynamicSize') || 0;
+		const dynamicFlexSize =
+			this.getSplitterItemSingleParam(el, 'dynamicSize') || 0;
 		const minSize = this.getMaxFlexSize(el, 'minSize', totalSize);
 		const preLimitSize = this.getMaxFlexSize(el, 'preLimitSize', totalSize);
 
@@ -517,8 +586,9 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 
 			static: {
 				minSize: this.getSplitterItemSingleParam(el, 'minSize') ?? null,
-				preLimitSize: this.getSplitterItemSingleParam(el, 'preLimitSize') ?? null
-			}
+				preLimitSize:
+					this.getSplitterItemSingleParam(el, 'preLimitSize') ?? null,
+			},
 		};
 	}
 
@@ -527,13 +597,17 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 		el.style.flex = `${size.toFixed(1)} 1 0`;
 	}
 
-	public updateFlexValues(data: Array<{
-		id: string;
-		breakpoints: Record<number, number>;
-	}>): void {
+	public updateFlexValues(
+		data: Array<{
+			id: string;
+			breakpoints: Record<number, number>;
+		}>,
+	): void {
 		let totalFlex = 0;
 		const currentWidth = window.innerWidth;
-		const getBreakpointValue = (breakpoints: Record<number, number>): number => {
+		const getBreakpointValue = (
+			breakpoints: Record<number, number>,
+		): number => {
 			const sortedBreakpoints = Object.keys(breakpoints)
 				.map(Number)
 				.sort((a, b) => a - b);
@@ -567,7 +641,7 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 				const item = document.getElementById(id);
 
 				if (item) {
-					const currentFlex = parseFloat(item.style.flex.split(" ")[0]);
+					const currentFlex = parseFloat(item.style.flex.split(' ')[0]);
 					const adjustedFlex = currentFlex * scaleFactor;
 
 					this.updateSplitterItemParam(item, adjustedFlex);
@@ -631,12 +705,18 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 	}
 
 	// Static method
-	private static findInCollection(target: HSLayoutSplitter | HTMLElement | string): ICollectionItem<HSLayoutSplitter> | null {
-		return window.$hsLayoutSplitterCollection.find((el) => {
-			if (target instanceof HSLayoutSplitter) return el.element.el === target.el;
-			else if (typeof target === 'string') return el.element.el === document.querySelector(target);
-			else return el.element.el === target;
-		}) || null;
+	private static findInCollection(
+		target: HSLayoutSplitter | HTMLElement | string,
+	): ICollectionItem<HSLayoutSplitter> | null {
+		return (
+			window.$hsLayoutSplitterCollection.find((el) => {
+				if (target instanceof HSLayoutSplitter)
+					return el.element.el === target.el;
+				else if (typeof target === 'string')
+					return el.element.el === document.querySelector(target);
+				else return el.element.el === target;
+			}) || null
+		);
 	}
 
 	static autoInit() {
@@ -709,7 +789,11 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 			: null;
 	}
 
-	static on(evt: string, target: HSLayoutSplitter | HTMLElement | string, cb: Function) {
+	static on(
+		evt: string,
+		target: HSLayoutSplitter | HTMLElement | string,
+		cb: Function,
+	) {
 		const instance = HSLayoutSplitter.findInCollection(target);
 
 		if (instance) instance.element.events[evt] = cb;

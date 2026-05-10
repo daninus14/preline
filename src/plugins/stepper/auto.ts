@@ -1,9 +1,9 @@
-import HSStepper from "./core";
+import HSStepper from './core';
 
-window.addEventListener("load", () => {
-  HSStepper.autoInit();
+window.addEventListener('load', () => {
+	HSStepper.autoInit();
 });
 
-if (typeof window !== "undefined") {
-  window.HSStepper = HSStepper;
+if (typeof window !== 'undefined') {
+	window.HSStepper = HSStepper;
 }

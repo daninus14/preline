@@ -1,6 +1,6 @@
 /*
  * HSBasePlugin
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -8,7 +8,10 @@
 
 import { IBasePlugin } from '../base-plugin/interfaces';
 
-export default class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
+export default class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<
+	O,
+	E
+> {
 	constructor(
 		public el: E,
 		public options: O,

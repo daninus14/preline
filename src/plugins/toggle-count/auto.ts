@@ -1,4 +1,4 @@
-import HSToggleCount from "./core";
+import HSToggleCount from './core';
 
 window.addEventListener('load', () => {
 	HSToggleCount.autoInit();

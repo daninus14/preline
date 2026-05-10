@@ -1,19 +1,19 @@
-import HSComboBox from "./core";
+import HSComboBox from './core';
 
 window.addEventListener('load', () => {
-  HSComboBox.autoInit();
+	HSComboBox.autoInit();
 });
 
 document.addEventListener('scroll', () => {
-  if (!window.$hsComboBoxCollection) return false;
+	if (!window.$hsComboBoxCollection) return false;
 
-  const target = window.$hsComboBoxCollection.find((el) => el.element.isOpened);
+	const target = window.$hsComboBoxCollection.find((el) => el.element.isOpened);
 
-  if (target && !target.element.preventAutoPosition) {
-    target.element.recalculateDirection();
-  }
+	if (target && !target.element.preventAutoPosition) {
+		target.element.recalculateDirection();
+	}
 });
 
 if (typeof window !== 'undefined') {
-  window.HSComboBox = HSComboBox;
+	window.HSComboBox = HSComboBox;
 }

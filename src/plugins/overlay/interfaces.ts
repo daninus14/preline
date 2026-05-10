@@ -6,6 +6,7 @@ export interface IOverlayOptions {
 	backdropParent?: string | HTMLElement | Document;
 	backdropExtraClasses?: string | null;
 	moveOverlayToBody?: number | null;
+	isToggleClassesImmediately?: boolean;
 }
 
 export interface IOverlay {

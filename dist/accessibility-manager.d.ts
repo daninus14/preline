@@ -1,5 +1,5 @@
 export interface IAccessibilityKeyboardHandlers {
-	onEnter?: () => boolean | void;
+	onEnter?: (evt: KeyboardEvent) => boolean | void;
 	onEsc?: () => boolean | void;
 	onSpace?: () => boolean | void;
 	onArrow?: (event: KeyboardEvent) => void;

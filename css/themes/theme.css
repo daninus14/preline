@@ -17,53 +17,53 @@
 }
 
 @theme inline {
-  --color-khaki-50: oklch(98% 0.002 67.8);
-  --color-khaki-100: oklch(95.5% 0.004 91.4);
-  --color-khaki-200: oklch(89.7% 0.008 91.5);
-  --color-khaki-300: oklch(82.7% 0.014 88.7);
-  --color-khaki-400: oklch(73% 0.024 87.2);
-  --color-khaki-500: oklch(62.5% 0.031 88.8);
-  --color-khaki-600: oklch(52.8% 0.031 91);
-  --color-khaki-700: oklch(41.4% 0.027 89.9);
-  --color-khaki-800: oklch(34.6% 0.023 89.5);
-  --color-khaki-900: oklch(30.6% 0.018 88.8);
-  --color-khaki-950: oklch(20.1% 0.023 91.7);
+  --color-preline-khaki-50: oklch(98% 0.002 67.8);
+  --color-preline-khaki-100: oklch(95.5% 0.004 91.4);
+  --color-preline-khaki-200: oklch(89.7% 0.008 91.5);
+  --color-preline-khaki-300: oklch(82.7% 0.014 88.7);
+  --color-preline-khaki-400: oklch(73% 0.024 87.2);
+  --color-preline-khaki-500: oklch(62.5% 0.031 88.8);
+  --color-preline-khaki-600: oklch(52.8% 0.031 91);
+  --color-preline-khaki-700: oklch(41.4% 0.027 89.9);
+  --color-preline-khaki-800: oklch(34.6% 0.023 89.5);
+  --color-preline-khaki-900: oklch(30.6% 0.018 88.8);
+  --color-preline-khaki-950: oklch(20.1% 0.023 91.7);
 
-  --color-mauve-50: oklch(98.1% 0.002 345.2);
-  --color-mauve-100: oklch(95.6% 0.006 334);
-  --color-mauve-200: oklch(89.7% 0.013 337.5);
-  --color-mauve-300: oklch(82.4% 0.022 339.7);
-  --color-mauve-400: oklch(71.7% 0.038 340.7);
-  --color-mauve-500: oklch(55.9% 0.045 341);
-  --color-mauve-600: oklch(51.1% 0.047 342.2);
-  --color-mauve-700: oklch(45.5% 0.04 342.1);
-  --color-mauve-800: oklch(36.4% 0.034 342.3);
-  --color-mauve-900: oklch(32.3% 0.029 340.9);
-  --color-mauve-950: oklch(21.9% 0.034 341.1);
+  --color-preline-mauve-50: oklch(98.1% 0.002 345.2);
+  --color-preline-mauve-100: oklch(95.6% 0.006 334);
+  --color-preline-mauve-200: oklch(89.7% 0.013 337.5);
+  --color-preline-mauve-300: oklch(82.4% 0.022 339.7);
+  --color-preline-mauve-400: oklch(71.7% 0.038 340.7);
+  --color-preline-mauve-500: oklch(55.9% 0.045 341);
+  --color-preline-mauve-600: oklch(51.1% 0.047 342.2);
+  --color-preline-mauve-700: oklch(45.5% 0.04 342.1);
+  --color-preline-mauve-800: oklch(36.4% 0.034 342.3);
+  --color-preline-mauve-900: oklch(32.3% 0.029 340.9);
+  --color-preline-mauve-950: oklch(21.9% 0.034 341.1);
 
-  --color-avocado-50: oklch(92.8% 0.012 120);
-  --color-avocado-100: oklch(88.6% 0.02 120);
-  --color-avocado-200: oklch(80.4% 0.035 120);
-  --color-avocado-300: oklch(72.4% 0.055 120);
-  --color-avocado-400: oklch(64.6% 0.075 120);
-  --color-avocado-500: oklch(57% 0.085 120);
-  --color-avocado-600: oklch(49.6% 0.08 120);
-  --color-avocado-700: oklch(42.4% 0.07 120);
-  --color-avocado-800: oklch(35.4% 0.055 120);
-  --color-avocado-900: oklch(28.6% 0.04 120);
-  --color-avocado-950: oklch(25.3% 0.03 120);
+  --color-preline-avocado-50: oklch(92.8% 0.012 120);
+  --color-preline-avocado-100: oklch(88.6% 0.02 120);
+  --color-preline-avocado-200: oklch(80.4% 0.035 120);
+  --color-preline-avocado-300: oklch(72.4% 0.055 120);
+  --color-preline-avocado-400: oklch(64.6% 0.075 120);
+  --color-preline-avocado-500: oklch(57% 0.085 120);
+  --color-preline-avocado-600: oklch(49.6% 0.08 120);
+  --color-preline-avocado-700: oklch(42.4% 0.07 120);
+  --color-preline-avocado-800: oklch(35.4% 0.055 120);
+  --color-preline-avocado-900: oklch(28.6% 0.04 120);
+  --color-preline-avocado-950: oklch(25.3% 0.03 120);
   
-  --color-avocado-soft-50: oklch(98% 0.002 120);
-  --color-avocado-soft-100: oklch(95.5% 0.004 120);
-  --color-avocado-soft-200: oklch(89.7% 0.008 120);
-  --color-avocado-soft-300: oklch(82.7% 0.012 120);
-  --color-avocado-soft-400: oklch(73% 0.018 120);
-  --color-avocado-soft-500: oklch(62.5% 0.02 120);
-  --color-avocado-soft-600: oklch(52.8% 0.016 120);
-  --color-avocado-soft-700: oklch(41.4% 0.012 120);
-  --color-avocado-soft-800: oklch(26.9% 0.006 120);
-  --color-avocado-soft-900: oklch(20.5% 0.004 120);
-  --color-avocado-soft-950: oklch(14.1% 0.002 120);
+  --color-preline-avocado-soft-50: oklch(98% 0.002 120);
+  --color-preline-avocado-soft-100: oklch(95.5% 0.004 120);
+  --color-preline-avocado-soft-200: oklch(89.7% 0.008 120);
+  --color-preline-avocado-soft-300: oklch(82.7% 0.012 120);
+  --color-preline-avocado-soft-400: oklch(73% 0.018 120);
+  --color-preline-avocado-soft-500: oklch(62.5% 0.02 120);
+  --color-preline-avocado-soft-600: oklch(52.8% 0.016 120);
+  --color-preline-avocado-soft-700: oklch(41.4% 0.012 120);
+  --color-preline-avocado-soft-800: oklch(26.9% 0.006 120);
+  --color-preline-avocado-soft-900: oklch(20.5% 0.004 120);
+  --color-preline-avocado-soft-950: oklch(14.1% 0.002 120);
   
   --color-background: var(--background);
   --color-background-1: var(--background-1);
@@ -617,7 +617,7 @@
   --navbar-nav-focus: var(--color-neutral-700);
   --navbar-nav-active: var(--color-neutral-700);
   --navbar-nav-list-divider: var(--color-neutral-700);
-  --navbar-inverse: var(--color-primary-950);
+  --navbar-inverse: var(--color-neutral-950);
   
   --navbar-1: var(--color-neutral-900);
   --navbar-1-line: var(--color-neutral-700);
@@ -645,7 +645,7 @@
   --sidebar-nav-focus: var(--color-neutral-700);
   --sidebar-nav-active: var(--color-neutral-700);
   --sidebar-nav-list-divider: var(--color-neutral-700);
-  --sidebar-inverse: var(--color-primary-950);
+  --sidebar-inverse: var(--color-neutral-950);
 
   --sidebar-1: var(--color-neutral-900);
   --sidebar-1-line: var(--color-neutral-700);

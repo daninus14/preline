@@ -7,14 +7,6 @@
 		"outDir": "./.dts-tmp",
 		"noEmit": false
 	},
-	"include": [
-		"src/**/*",
-		"global.d.ts"
-	],
-	"exclude": [
-		"node_modules",
-		".dts-tmp",
-		"dist",
-		"**/*.spec.ts"
-	]
+	"include": ["src/**/*", "global.d.ts"],
+	"exclude": ["node_modules", ".dts-tmp", "dist", "**/*.spec.ts"]
 }

@@ -1,9 +1,9 @@
-import HSTextareaAutoHeight from "./core";
+import HSTextareaAutoHeight from './core';
 
 window.addEventListener('load', () => {
-  HSTextareaAutoHeight.autoInit();
+	HSTextareaAutoHeight.autoInit();
 });
 
 if (typeof window !== 'undefined') {
-  window.HSTextareaAutoHeight = HSTextareaAutoHeight;
+	window.HSTextareaAutoHeight = HSTextareaAutoHeight;
 }

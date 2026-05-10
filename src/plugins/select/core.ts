@@ -1,6 +1,6 @@
 /*
  * HSSelect
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -151,6 +151,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private lastQuery: string = '';
 	private readonly apiPageStart?: number;
 	private readonly apiTotalPath?: string | null;
+	private isLoadEventFired: boolean = false;
 
 	private optionId = 0;
 
@@ -482,6 +483,19 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		else this.buildToggle();
 		this.buildDropdown();
 		if (this.extraMarkup) this.buildExtraMarkup();
+
+		if (!this.apiUrl) this.fireLoadEvent();
+	}
+
+	private fireLoadEvent() {
+		if (this.isLoadEventFired) return;
+
+		this.isLoadEventFired = true;
+
+		setTimeout(() => {
+			this.fireEvent('load', this.el);
+			dispatch('load.hs.select', this.el, this.el);
+		});
 	}
 
 	private setOptions() {
@@ -917,7 +931,9 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			optgroupName = '';
 		}
 
-		if (this.apiUrl) this.optionsFromRemoteData();
+		if (this.apiUrl) {
+			this.optionsFromRemoteData().then(() => this.fireLoadEvent());
+		}
 
 		if (!this.apiUrl) {
 			this.sortElements(this.el, 'option');
@@ -1055,6 +1071,14 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		}
 	}
 
+	/**
+	 * Positions the dropdown using Floating UI when `dropdownScope` is set to `"window"`.
+	 *
+	 * Requires `@floating-ui/dom` to be loaded on the page (e.g. via CDN or npm).
+	 * Used by: `dropdownScope: "window"`, `dropdownPlacement`, `dropdownAutoPlacement`.
+	 *
+	 * @see https://floating-ui.com
+	 */
 	private buildFloatingUI() {
 		if (typeof FloatingUIDOM !== 'undefined' && FloatingUIDOM.computePosition) {
 			document.body.appendChild(this.dropdown);
@@ -1577,7 +1601,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	}
 
 	private async optionsFromRemoteData(val = '') {
-		const res = await this.apiRequest(val);
+		const res = (await this.apiRequest(val)) || [];
 		this.remoteOptions = res;
 
 		if (res.length) this.buildOptionsFromRemoteData(this.remoteOptions as []);
@@ -1690,17 +1714,40 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 					? this.apiPageStart
 					: defaultStart;
 			this.currentPage = pageStart;
-			this.remoteOptions = res;
+			const currentlySelectedValsOnClear = Array.isArray(this.value)
+				? this.value
+				: this.value
+					? [this.value]
+					: [];
+			const prevSelectedRemoteOnClear = (
+				this.remoteOptions as IApiFieldMap[]
+			).filter((el) =>
+				currentlySelectedValsOnClear.includes(`${el[this.apiFieldsMap?.val]}`),
+			);
+			const resValSetOnClear = new Set(
+				res.map((el: IApiFieldMap) => `${el[this.apiFieldsMap?.val]}`),
+			);
+			this.remoteOptions = [
+				...res,
+				...prevSelectedRemoteOnClear.filter(
+					(el) => !resValSetOnClear.has(`${el[this.apiFieldsMap?.val]}`),
+				),
+			];
 
 			Array.from(
 				this.dropdown.querySelectorAll('[data-value]:not([data-static])'),
-			).forEach((el) => el.remove());
+			).forEach((el: HTMLElement) => {
+				if (
+					!currentlySelectedValsOnClear.includes(el.getAttribute('data-value'))
+				)
+					el.remove();
+			});
 			Array.from(
 				this.el.querySelectorAll(
 					'option[value][data-hs-select-option]:not([data-static])',
 				),
 			).forEach((el: HTMLOptionElement) => {
-				el.remove();
+				if (!currentlySelectedValsOnClear.includes(el.value)) el.remove();
 			});
 
 			if (res.length) this.buildOptionsFromRemoteData(res);
@@ -1721,7 +1768,23 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		const pageStart =
 			typeof this.apiPageStart === 'number' ? this.apiPageStart : defaultStart;
 		this.currentPage = pageStart;
-		this.remoteOptions = res;
+		const currentlySelectedVals = Array.isArray(this.value)
+			? this.value
+			: this.value
+				? [this.value]
+				: [];
+		const prevSelectedRemote = (this.remoteOptions as IApiFieldMap[]).filter(
+			(el) => currentlySelectedVals.includes(`${el[this.apiFieldsMap?.val]}`),
+		);
+		const resValSet = new Set(
+			res.map((el: IApiFieldMap) => `${el[this.apiFieldsMap?.val]}`),
+		);
+		this.remoteOptions = [
+			...res,
+			...prevSelectedRemote.filter(
+				(el) => !resValSet.has(`${el[this.apiFieldsMap?.val]}`),
+			),
+		];
 		let newIds = res.map((item: { id: string }) => `${item.id}`);
 		let restOptions = null;
 		const pseudoOptions = this.dropdown.querySelectorAll(
@@ -2412,7 +2475,10 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private focusMenuItem(direction: 'next' | 'prev'): void {
 		const options = Array.from(
 			this.dropdown.querySelectorAll(':scope > *:not(.hidden)'),
-		).filter((el: any) => !el.classList.contains('disabled') && !el.hasAttribute('data-optgroup'));
+		).filter(
+			(el: any) =>
+				!el.classList.contains('disabled') && !el.hasAttribute('data-optgroup'),
+		);
 
 		if (!options.length) return;
 
@@ -2734,6 +2800,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private static findInCollection(
 		target: HSSelect | HTMLElement | string,
 	): ICollectionItem<HSSelect> | null {
+		HSSelect.ensureGlobalHandlers();
+
 		return (
 			window.$hsSelectCollection.find((el) => {
 				if (target instanceof HSSelect) return el.element.el === target.el;
@@ -2745,6 +2813,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	}
 
 	static getInstance(target: HTMLElement | string, isInstance?: boolean) {
+		HSSelect.ensureGlobalHandlers();
+
 		const elInCollection = window.$hsSelectCollection.find(
 			(el) =>
 				el.element.el ===

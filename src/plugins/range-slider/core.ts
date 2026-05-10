@@ -1,22 +1,25 @@
 /*
  * HSRangeSlider
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import type { cssClasses, target } from "nouislider";
+import type { cssClasses, target } from 'nouislider';
 
 import {
 	IRangeSlider,
 	IRangeSliderCssClassesObject,
 	IRangeSliderOptions,
-} from "./interfaces";
+} from './interfaces';
 
-import HSBasePlugin from "../base-plugin";
+import HSBasePlugin from '../base-plugin';
 
-class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> implements IRangeSlider {
+class HSRangeSlider
+	extends HSBasePlugin<IRangeSliderOptions>
+	implements IRangeSlider
+{
 	private readonly concatOptions: IRangeSliderOptions;
 	private readonly wrapper: HTMLElement | null;
 	private readonly currentValue: HTMLElement[] | null;
@@ -26,9 +29,12 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> implements IRangeS
 	};
 
 	constructor(el: HTMLElement, options?: IRangeSliderOptions, events?: {}) {
-		super(el, options, events);
+		super(el, options || ({} as IRangeSliderOptions), events);
 
-		const data = el.getAttribute("data-hs-range-slider");
+		if (!HSRangeSlider.isAvailable())
+			throw new Error(HSRangeSlider.unavailableMessage);
+
+		const data = el.getAttribute('data-hs-range-slider');
 		const dataOptions: IRangeSliderOptions = data ? JSON.parse(data) : {};
 
 		this.concatOptions = {
@@ -40,14 +46,16 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> implements IRangeS
 			},
 		};
 
-		this.wrapper = this.concatOptions.wrapper ||
-			el.closest(".hs-range-slider-wrapper") || null;
+		this.wrapper =
+			this.concatOptions.wrapper ||
+			el.closest('.hs-range-slider-wrapper') ||
+			null;
 		this.currentValue = this.concatOptions.currentValue
 			? Array.from(this.concatOptions.currentValue)
 			: Array.from(
-				this.wrapper?.querySelectorAll(".hs-range-slider-current-value") ||
-					[],
-			);
+					this.wrapper?.querySelectorAll('.hs-range-slider-current-value') ||
+						[],
+				);
 		this.icons = this.concatOptions.icons || {};
 
 		this.init();
@@ -87,20 +95,20 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> implements IRangeS
 		this.createCollection(window.$hsRangeSliderCollection, this);
 
 		if (
-			typeof this.concatOptions?.formatter === "object"
+			typeof this.concatOptions?.formatter === 'object'
 				? this.concatOptions?.formatter?.type ===
-					"thousandsSeparatorAndDecimalPoints"
-				: this.concatOptions?.formatter === "thousandsSeparatorAndDecimalPoints"
+					'thousandsSeparatorAndDecimalPoints'
+				: this.concatOptions?.formatter === 'thousandsSeparatorAndDecimalPoints'
 		) {
 			this.thousandsSeparatorAndDecimalPointsFormatter();
 		} else if (
-			typeof this.concatOptions?.formatter === "object"
-				? this.concatOptions?.formatter?.type === "integer"
-				: this.concatOptions?.formatter === "integer"
+			typeof this.concatOptions?.formatter === 'object'
+				? this.concatOptions?.formatter?.type === 'integer'
+				: this.concatOptions?.formatter === 'integer'
 		) {
 			this.integerFormatter();
 		} else if (
-			typeof this.concatOptions?.formatter === "object" &&
+			typeof this.concatOptions?.formatter === 'object' &&
 			(this.concatOptions?.formatter?.prefix ||
 				this.concatOptions?.formatter?.postfix)
 		) {
@@ -111,7 +119,7 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> implements IRangeS
 
 		if (this.currentValue && this.currentValue.length > 0) {
 			(this.el as target).noUiSlider.on(
-				"update",
+				'update',
 				(values: (string | number)[]) => {
 					this.updateCurrentValue(values);
 				},
@@ -123,9 +131,9 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> implements IRangeS
 	}
 
 	private formatValue(val: number | string) {
-		let result = "";
+		let result = '';
 
-		if (typeof this.concatOptions?.formatter === "object") {
+		if (typeof this.concatOptions?.formatter === 'object') {
 			if (this.concatOptions?.formatter?.prefix) {
 				result += this.concatOptions?.formatter?.prefix;
 			}
@@ -160,26 +168,26 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> implements IRangeS
 		this.format = {
 			to: (val: number) =>
 				this.formatValue(
-					new Intl.NumberFormat("en-US", {
+					new Intl.NumberFormat('en-US', {
 						minimumFractionDigits: 2,
 						maximumFractionDigits: 2,
 					}).format(val),
 				),
-			from: (val: string) => parseFloat(val.replace(/,/g, "")),
+			from: (val: string) => parseFloat(val.replace(/,/g, '')),
 		};
 
 		if (this.concatOptions?.tooltips) this.concatOptions.tooltips = this.format;
 	}
 
 	private setDisabled() {
-		this.el.setAttribute("disabled", "disabled");
-		this.el.classList.add("disabled");
+		this.el.setAttribute('disabled', 'disabled');
+		this.el.classList.add('disabled');
 	}
 
 	private buildHandleIcon() {
 		if (!this.icons.handle) return false;
 
-		const handle = this.el.querySelector(".noUi-handle");
+		const handle = this.el.querySelector('.noUi-handle');
 
 		if (!handle) return false;
 
@@ -218,21 +226,38 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> implements IRangeS
 	}
 
 	// Static methods
+	private static readonly unavailableMessage =
+		'HSRangeSlider: noUiSlider is not available, please add it to the page.';
+
+	private static isAvailable() {
+		return typeof noUiSlider !== 'undefined';
+	}
+
 	static getInstance(target: HTMLElement | string, isInstance = false) {
 		const elInCollection = window.$hsRangeSliderCollection.find(
 			(el) =>
 				el.element.el ===
-					(typeof target === "string"
-						? document.querySelector(target)
-						: target),
+				(typeof target === 'string' ? document.querySelector(target) : target),
 		);
 
 		return elInCollection
-			? isInstance ? elInCollection : elInCollection.element.el
+			? isInstance
+				? elInCollection
+				: elInCollection.element.el
 			: null;
 	}
 
 	static autoInit() {
+		const selector = '[data-hs-range-slider]:not(.--prevent-on-load-init)';
+
+		if (!HSRangeSlider.isAvailable()) {
+			if (document.querySelectorAll(selector).length) {
+				console.error(HSRangeSlider.unavailableMessage);
+			}
+
+			return;
+		}
+
 		if (!window.$hsRangeSliderCollection) window.$hsRangeSliderCollection = [];
 
 		if (window.$hsRangeSliderCollection) {
@@ -241,17 +266,15 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> implements IRangeS
 			);
 		}
 
-		document
-			.querySelectorAll("[data-hs-range-slider]:not(.--prevent-on-load-init)")
-			.forEach((el: HTMLElement) => {
-				if (
-					!window.$hsRangeSliderCollection.find(
-						(elC) => (elC?.element?.el as HTMLElement) === el,
-					)
-				) {
-					new HSRangeSlider(el);
-				}
-			});
+		document.querySelectorAll(selector).forEach((el: HTMLElement) => {
+			if (
+				!window.$hsRangeSliderCollection.find(
+					(elC) => (elC?.element?.el as HTMLElement) === el,
+				)
+			) {
+				new HSRangeSlider(el);
+			}
+		});
 	}
 }
 

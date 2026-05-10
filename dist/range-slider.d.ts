@@ -51,6 +51,8 @@ declare class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> implements
 	private buildHandleIcon;
 	private updateCurrentValue;
 	destroy(): void;
+	private static readonly unavailableMessage;
+	private static isAvailable;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 }

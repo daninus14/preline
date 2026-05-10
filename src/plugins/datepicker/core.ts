@@ -1,6 +1,6 @@
 /*
  * HSDatepicker
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -91,10 +91,10 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 		const chainCallbacks =
 			(superCallback?: Function, customCallback?: (self: Calendar) => void) =>
-				(self: Calendar) => {
-					superCallback?.(self);
-					customCallback?.(self);
-				};
+			(self: Calendar) => {
+				superCallback?.(self);
+				customCallback?.(self);
+			};
 		const initTime = (self: Calendar) => {
 			if (this.hasTime(self)) this.initCustomTime(self);
 		};
@@ -392,7 +392,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 			result[key as keyof T & keyof U] =
 				`${sharedValue} ${otherValue}`.trim() as T[keyof T & keyof U] &
-				U[keyof T & keyof U];
+					U[keyof T & keyof U];
 		});
 
 		return result;
@@ -529,7 +529,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 					self.set(
 						{
 							selectedMonth: (month > maxMonth - displayMonthsCount &&
-								+evt.detail.payload === maxYear
+							+evt.detail.payload === maxYear
 								? maxMonth - displayMonthsCount + 1
 								: month) as Range<12>,
 							selectedYear: evt.detail.payload,
@@ -548,32 +548,33 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		const customSelectOptions = this.updatedStyles?.customSelect;
 		const hours = customSelectOptions
 			? this.updateTemplate(
-				this.templatesByType.hours(this.concatOptions.selectedTheme),
-				customSelectOptions?.shared || ({} as ISelectOptions),
-				customSelectOptions?.hours || ({} as ISelectOptions),
-			)
+					this.templatesByType.hours(this.concatOptions.selectedTheme),
+					customSelectOptions?.shared || ({} as ISelectOptions),
+					customSelectOptions?.hours || ({} as ISelectOptions),
+				)
 			: this.templatesByType.hours(this.concatOptions.selectedTheme);
 		const minutes = customSelectOptions
 			? this.updateTemplate(
-				this.templatesByType.minutes(this.concatOptions.selectedTheme),
-				customSelectOptions?.shared || ({} as ISelectOptions),
-				customSelectOptions?.minutes || ({} as ISelectOptions),
-			)
+					this.templatesByType.minutes(this.concatOptions.selectedTheme),
+					customSelectOptions?.shared || ({} as ISelectOptions),
+					customSelectOptions?.minutes || ({} as ISelectOptions),
+				)
 			: this.templatesByType.minutes(this.concatOptions.selectedTheme);
 		const meridiem = customSelectOptions
 			? this.updateTemplate(
-				this.templatesByType.meridiem(this.concatOptions.selectedTheme),
-				customSelectOptions?.shared || ({} as ISelectOptions),
-				customSelectOptions?.meridiem || ({} as ISelectOptions),
-			)
+					this.templatesByType.meridiem(this.concatOptions.selectedTheme),
+					customSelectOptions?.shared || ({} as ISelectOptions),
+					customSelectOptions?.meridiem || ({} as ISelectOptions),
+				)
 			: this.templatesByType.meridiem(this.concatOptions.selectedTheme);
 		const time =
 			this?.dataOptions?.templates?.time ??
 			`
 			<div class="pt-3 flex justify-center items-center gap-x-2">
         ${hours}
-        <span class="text-gray-800 ${this.concatOptions.selectedTheme !== 'light' ? 'dark:text-white' : ''
-			}">:</span>
+        <span class="text-gray-800 ${
+					this.concatOptions.selectedTheme !== 'light' ? 'dark:text-white' : ''
+				}">:</span>
         ${minutes}
         ${meridiem}
       </div>
@@ -587,10 +588,10 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		const customSelectOptions = this.updatedStyles?.customSelect;
 		const updatedTemplate = customSelectOptions
 			? this.updateTemplate(
-				this.templatesByType.months(this.concatOptions.selectedTheme),
-				customSelectOptions?.shared || ({} as ISelectOptions),
-				customSelectOptions?.months || ({} as ISelectOptions),
-			)
+					this.templatesByType.months(this.concatOptions.selectedTheme),
+					customSelectOptions?.shared || ({} as ISelectOptions),
+					customSelectOptions?.months || ({} as ISelectOptions),
+				)
 			: this.templatesByType.months(this.concatOptions.selectedTheme);
 		const month = mode === 'custom-select' ? updatedTemplate : '<#Month />';
 
@@ -626,10 +627,10 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 			const customSelectOptions = this.updatedStyles?.customSelect;
 			const updatedTemplate = customSelectOptions
 				? this.updateTemplate(
-					years,
-					customSelectOptions?.shared || ({} as ISelectOptions),
-					customSelectOptions?.years || ({} as ISelectOptions),
-				)
+						years,
+						customSelectOptions?.shared || ({} as ISelectOptions),
+						customSelectOptions?.years || ({} as ISelectOptions),
+					)
 				: years;
 
 			return updatedTemplate;
@@ -641,9 +642,9 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private generateCustomArrowPrevMarkup() {
 		const arrowPrev = this?.dataOptions?.templates?.arrowPrev
 			? this.createArrowFromTemplate(
-				this.dataOptions.templates.arrowPrev,
-				this.updatedStyles.arrowPrev,
-			)
+					this.dataOptions.templates.arrowPrev,
+					this.updatedStyles.arrowPrev,
+				)
 			: '<#ArrowPrev [month] />';
 
 		return arrowPrev;
@@ -652,9 +653,9 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private generateCustomArrowNextMarkup() {
 		const arrowNext = this?.dataOptions?.templates?.arrowNext
 			? this.createArrowFromTemplate(
-				this.dataOptions.templates.arrowNext,
-				this.updatedStyles.arrowNext,
-			)
+					this.dataOptions.templates.arrowNext,
+					this.updatedStyles.arrowNext,
+				)
 			: '<#ArrowNext [month] />';
 
 		return arrowNext;

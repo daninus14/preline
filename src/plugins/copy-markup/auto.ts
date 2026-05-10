@@ -1,9 +1,9 @@
-import HSCopyMarkup from "./core";
+import HSCopyMarkup from './core';
 
-window.addEventListener("load", () => {
+window.addEventListener('load', () => {
 	HSCopyMarkup.autoInit();
 });
 
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
 	window.HSCopyMarkup = HSCopyMarkup;
 }

@@ -1,9 +1,9 @@
-import HSPinInput from "./core";
+import HSPinInput from './core';
 
 window.addEventListener('load', () => {
-  HSPinInput.autoInit();
+	HSPinInput.autoInit();
 });
 
 if (typeof window !== 'undefined') {
-  window.HSPinInput = HSPinInput;
+	window.HSPinInput = HSPinInput;
 }

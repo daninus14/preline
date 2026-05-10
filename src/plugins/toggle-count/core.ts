@@ -1,6 +1,6 @@
 /*
  * HSToggleCount
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -10,7 +10,10 @@ import { IToggleCountOptions, IToggleCount } from '../toggle-count/interfaces';
 
 import HSBasePlugin from '../base-plugin';
 
-class HSToggleCount extends HSBasePlugin<IToggleCountOptions> implements IToggleCount {
+class HSToggleCount
+	extends HSBasePlugin<IToggleCountOptions>
+	implements IToggleCount
+{
 	private readonly target: HTMLInputElement | null;
 	private readonly min: number | null;
 	private readonly max: number | null;

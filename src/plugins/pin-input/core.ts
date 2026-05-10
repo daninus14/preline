@@ -1,6 +1,6 @@
 /*
  * HSPinInput
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -21,33 +21,33 @@ class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinInput {
 
 	private onElementInputListener:
 		| {
-			el: HTMLElement;
-			fn: (evt: Event) => void;
-		}[]
+				el: HTMLElement;
+				fn: (evt: Event) => void;
+		  }[]
 		| null;
 	private onElementPasteListener:
 		| {
-			el: HTMLElement;
-			fn: (evt: Event) => void;
-		}[]
+				el: HTMLElement;
+				fn: (evt: Event) => void;
+		  }[]
 		| null;
 	private onElementKeydownListener:
 		| {
-			el: HTMLElement;
-			fn: (evt: Event) => void;
-		}[]
+				el: HTMLElement;
+				fn: (evt: Event) => void;
+		  }[]
 		| null;
 	private onElementFocusinListener:
 		| {
-			el: HTMLElement;
-			fn: () => void;
-		}[]
+				el: HTMLElement;
+				fn: () => void;
+		  }[]
 		| null;
 	private onElementFocusoutListener:
 		| {
-			el: HTMLElement;
-			fn: () => void;
-		}[]
+				el: HTMLElement;
+				fn: () => void;
+		  }[]
 		| null;
 
 	private elementInput(evt: Event, index: number) {

@@ -1,18 +1,21 @@
 /*
  * HSInputNumber
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { dispatch } from "../../utils";
+import { dispatch } from '../../utils';
 
-import { IInputNumber, IInputNumberOptions } from "../input-number/interfaces";
+import { IInputNumber, IInputNumberOptions } from '../input-number/interfaces';
 
-import HSBasePlugin from "../base-plugin";
+import HSBasePlugin from '../base-plugin';
 
-class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements IInputNumber {
+class HSInputNumber
+	extends HSBasePlugin<IInputNumberOptions>
+	implements IInputNumber
+{
 	private readonly input: HTMLInputElement | null;
 	private readonly increment: HTMLElement | null;
 	private readonly decrement: HTMLElement | null;
@@ -29,11 +32,11 @@ class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements IInputN
 	constructor(el: HTMLElement, options?: IInputNumberOptions) {
 		super(el, options);
 
-		this.input = this.el.querySelector("[data-hs-input-number-input]") || null;
+		this.input = this.el.querySelector('[data-hs-input-number-input]') || null;
 		this.increment =
-			this.el.querySelector("[data-hs-input-number-increment]") || null;
+			this.el.querySelector('[data-hs-input-number-increment]') || null;
 		this.decrement =
-			this.el.querySelector("[data-hs-input-number-decrement]") || null;
+			this.el.querySelector('[data-hs-input-number-decrement]') || null;
 
 		const data = this.el.dataset.hsInputNumber;
 		const dataOptions: IInputNumberOptions = data
@@ -44,14 +47,16 @@ class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements IInputN
 			...options,
 		};
 
-		this.minInputValue = "min" in concatOptions ? concatOptions.min : 0;
-		this.maxInputValue = "max" in concatOptions ? concatOptions.max : null;
-		this.step = "step" in concatOptions && concatOptions.step > 0
-			? concatOptions.step
-			: 1;
-		this.forceBlankValue = "forceBlankValue" in concatOptions
-			? concatOptions.forceBlankValue
-			: false;
+		this.minInputValue = 'min' in concatOptions ? concatOptions.min : 0;
+		this.maxInputValue = 'max' in concatOptions ? concatOptions.max : null;
+		this.step =
+			'step' in concatOptions && concatOptions.step > 0
+				? concatOptions.step
+				: 1;
+		this.forceBlankValue =
+			'forceBlankValue' in concatOptions
+				? concatOptions.forceBlankValue
+				: false;
 
 		if (this.input) this.checkIsNumberAndConvert();
 
@@ -63,11 +68,11 @@ class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements IInputN
 	}
 
 	private incrementClick() {
-		this.changeValue("increment");
+		this.changeValue('increment');
 	}
 
 	private decrementClick() {
-		this.changeValue("decrement");
+		this.changeValue('decrement');
 	}
 
 	private init() {
@@ -86,7 +91,7 @@ class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements IInputN
 		} else {
 			if (!this.forceBlankValue) {
 				this.inputValue = 0;
-				this.input.value = "0";
+				this.input.value = '0';
 			}
 		}
 	}
@@ -96,20 +101,20 @@ class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements IInputN
 		let decimalFound = false;
 		let negativeFound = false;
 
-		value.split("").forEach((char, index) => {
-			if (char >= "0" && char <= "9") cleanedArray.push(char);
-			else if (char === "." && !decimalFound) {
+		value.split('').forEach((char, index) => {
+			if (char >= '0' && char <= '9') cleanedArray.push(char);
+			else if (char === '.' && !decimalFound) {
 				cleanedArray.push(char);
 
 				decimalFound = true;
-			} else if (char === "-" && !negativeFound && cleanedArray.length === 0) {
+			} else if (char === '-' && !negativeFound && cleanedArray.length === 0) {
 				cleanedArray.push(char);
 
 				negativeFound = true;
 			}
 		});
 
-		const cleanedValue = cleanedArray.join("");
+		const cleanedValue = cleanedArray.join('');
 		const number = parseFloat(cleanedValue);
 
 		return isNaN(number) ? null : number;
@@ -127,28 +132,28 @@ class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements IInputN
 
 		if (this.inputValue <= this.minInputValue) this.changeValue();
 
-		if (this.input.hasAttribute("disabled")) this.disableButtons();
+		if (this.input.hasAttribute('disabled')) this.disableButtons();
 	}
 
 	private buildInput() {
 		this.onInputInputListener = () => this.inputInput();
 
-		this.input.addEventListener("input", this.onInputInputListener);
+		this.input.addEventListener('input', this.onInputInputListener);
 	}
 
 	private buildIncrement() {
 		this.onIncrementClickListener = () => this.incrementClick();
 
-		this.increment.addEventListener("click", this.onIncrementClickListener);
+		this.increment.addEventListener('click', this.onIncrementClickListener);
 	}
 
 	private buildDecrement() {
 		this.onDecrementClickListener = () => this.decrementClick();
 
-		this.decrement.addEventListener("click", this.onDecrementClickListener);
+		this.decrement.addEventListener('click', this.onDecrementClickListener);
 	}
 
-	private changeValue(event = "none") {
+	private changeValue(event = 'none') {
 		const payload = { inputValue: this.inputValue };
 		const minInputValue = this.minInputValue ?? Number.MIN_SAFE_INTEGER;
 		const maxInputValue = this.maxInputValue ?? Number.MAX_SAFE_INTEGER;
@@ -156,31 +161,34 @@ class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements IInputN
 		this.inputValue = isNaN(this.inputValue) ? 0 : this.inputValue;
 
 		switch (event) {
-			case "increment":
+			case 'increment':
 				const incrementedResult = this.inputValue + this.step;
-				this.inputValue = incrementedResult >= minInputValue &&
-						incrementedResult <= maxInputValue
-					? incrementedResult
-					: maxInputValue;
+				this.inputValue =
+					incrementedResult >= minInputValue &&
+					incrementedResult <= maxInputValue
+						? incrementedResult
+						: maxInputValue;
 				this.input.value = this.inputValue.toString();
 				break;
-			case "decrement":
+			case 'decrement':
 				const decrementedResult = this.inputValue - this.step;
-				this.inputValue = decrementedResult >= minInputValue &&
-						decrementedResult <= maxInputValue
-					? decrementedResult
-					: minInputValue;
+				this.inputValue =
+					decrementedResult >= minInputValue &&
+					decrementedResult <= maxInputValue
+						? decrementedResult
+						: minInputValue;
 				this.input.value = this.inputValue.toString();
 				break;
 			default:
 				const defaultResult = isNaN(parseInt(this.input.value))
 					? 0
 					: parseInt(this.input.value);
-				this.inputValue = defaultResult >= maxInputValue
-					? maxInputValue
-					: defaultResult <= minInputValue
-					? minInputValue
-					: defaultResult;
+				this.inputValue =
+					defaultResult >= maxInputValue
+						? maxInputValue
+						: defaultResult <= minInputValue
+							? minInputValue
+							: defaultResult;
 
 				this.input.value = this.inputValue.toString();
 
@@ -190,82 +198,82 @@ class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements IInputN
 		payload.inputValue = this.inputValue;
 
 		if (this.inputValue === minInputValue) {
-			this.el.classList.add("disabled");
-			if (this.decrement) this.disableButtons("decrement");
+			this.el.classList.add('disabled');
+			if (this.decrement) this.disableButtons('decrement');
 		} else {
-			this.el.classList.remove("disabled");
-			if (this.decrement) this.enableButtons("decrement");
+			this.el.classList.remove('disabled');
+			if (this.decrement) this.enableButtons('decrement');
 		}
 		if (this.inputValue === maxInputValue) {
-			this.el.classList.add("disabled");
-			if (this.increment) this.disableButtons("increment");
+			this.el.classList.add('disabled');
+			if (this.increment) this.disableButtons('increment');
 		} else {
-			this.el.classList.remove("disabled");
-			if (this.increment) this.enableButtons("increment");
+			this.el.classList.remove('disabled');
+			if (this.increment) this.enableButtons('increment');
 		}
 
-		this.fireEvent("change", payload);
-		dispatch("change.hs.inputNumber", this.el, payload);
+		this.fireEvent('change', payload);
+		dispatch('change.hs.inputNumber', this.el, payload);
 	}
 
-	private disableButtons(mode = "all") {
-		if (mode === "all") {
+	private disableButtons(mode = 'all') {
+		if (mode === 'all') {
 			if (
-				this.increment.tagName === "BUTTON" ||
-				this.increment.tagName === "INPUT"
+				this.increment.tagName === 'BUTTON' ||
+				this.increment.tagName === 'INPUT'
 			) {
-				this.increment.setAttribute("disabled", "disabled");
+				this.increment.setAttribute('disabled', 'disabled');
 			}
 			if (
-				this.decrement.tagName === "BUTTON" ||
-				this.decrement.tagName === "INPUT"
+				this.decrement.tagName === 'BUTTON' ||
+				this.decrement.tagName === 'INPUT'
 			) {
-				this.decrement.setAttribute("disabled", "disabled");
+				this.decrement.setAttribute('disabled', 'disabled');
 			}
-		} else if (mode === "increment") {
+		} else if (mode === 'increment') {
 			if (
-				this.increment.tagName === "BUTTON" ||
-				this.increment.tagName === "INPUT"
+				this.increment.tagName === 'BUTTON' ||
+				this.increment.tagName === 'INPUT'
 			) {
-				this.increment.setAttribute("disabled", "disabled");
+				this.increment.setAttribute('disabled', 'disabled');
 			}
-		} else if (mode === "decrement") {
+		} else if (mode === 'decrement') {
 			if (
-				this.decrement.tagName === "BUTTON" ||
-				this.decrement.tagName === "INPUT"
+				this.decrement.tagName === 'BUTTON' ||
+				this.decrement.tagName === 'INPUT'
 			) {
-				this.decrement.setAttribute("disabled", "disabled");
+				this.decrement.setAttribute('disabled', 'disabled');
 			}
 		}
 	}
 
-	private enableButtons(mode = "all") {
-		if (mode === "all") {
+	private enableButtons(mode = 'all') {
+		if (mode === 'all') {
 			if (
-				this.increment.tagName === "BUTTON" ||
-				this.increment.tagName === "INPUT"
+				this.increment.tagName === 'BUTTON' ||
+				this.increment.tagName === 'INPUT'
 			) {
-				this.increment.removeAttribute("disabled");
+				this.increment.removeAttribute('disabled');
 			}
 			if (
-				this.decrement.tagName === "BUTTON" ||
-				this.decrement.tagName === "INPUT"
+				this.decrement.tagName === 'BUTTON' ||
+				this.decrement.tagName === 'INPUT'
 			) {
-				this.decrement.removeAttribute("disabled");
+				this.decrement.removeAttribute('disabled');
 			}
-		} else if (mode === "increment") {
+		} else if (mode === 'increment') {
 			if (
-				this.increment.tagName === "BUTTON" ||
-				this.increment.tagName === "INPUT"
+				this.increment.tagName === 'BUTTON' ||
+				this.increment.tagName === 'INPUT'
 			) {
-				this.increment.removeAttribute("disabled");
+				this.increment.removeAttribute('disabled');
 			}
-		} else if (mode === "decrement") {
+		} else if (mode === 'decrement') {
 			if (
-				this.decrement.tagName === "BUTTON" ||
-				this.decrement.tagName === "INPUT"
+				this.decrement.tagName === 'BUTTON' ||
+				this.decrement.tagName === 'INPUT'
 			) {
-				this.decrement.removeAttribute("disabled");
+				this.decrement.removeAttribute('disabled');
 			}
 		}
 	}
@@ -273,16 +281,16 @@ class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements IInputN
 	// Public methods
 	public destroy() {
 		// Remove classes
-		this.el.classList.remove("disabled");
+		this.el.classList.remove('disabled');
 
 		// Remove attributes
-		this.increment.removeAttribute("disabled");
-		this.decrement.removeAttribute("disabled");
+		this.increment.removeAttribute('disabled');
+		this.decrement.removeAttribute('disabled');
 
 		// Remove listeners
-		this.input.removeEventListener("input", this.onInputInputListener);
-		this.increment.removeEventListener("click", this.onIncrementClickListener);
-		this.decrement.removeEventListener("click", this.onDecrementClickListener);
+		this.input.removeEventListener('input', this.onInputInputListener);
+		this.increment.removeEventListener('click', this.onIncrementClickListener);
+		this.decrement.removeEventListener('click', this.onDecrementClickListener);
 
 		window.$hsInputNumberCollection = window.$hsInputNumberCollection.filter(
 			({ element }) => element.el !== this.el,
@@ -294,13 +302,13 @@ class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements IInputN
 		const elInCollection = window.$hsInputNumberCollection.find(
 			(el) =>
 				el.element.el ===
-					(typeof target === "string"
-						? document.querySelector(target)
-						: target),
+				(typeof target === 'string' ? document.querySelector(target) : target),
 		);
 
 		return elInCollection
-			? isInstance ? elInCollection : elInCollection.element
+			? isInstance
+				? elInCollection
+				: elInCollection.element
 			: null;
 	}
 
@@ -314,7 +322,7 @@ class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements IInputN
 		}
 
 		document
-			.querySelectorAll("[data-hs-input-number]:not(.--prevent-on-load-init)")
+			.querySelectorAll('[data-hs-input-number]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsInputNumberCollection.find(

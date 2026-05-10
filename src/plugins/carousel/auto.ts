@@ -1,9 +1,9 @@
-import HSCarousel from "./core";
+import HSCarousel from './core';
 
 window.addEventListener('load', () => {
-  HSCarousel.autoInit();
+	HSCarousel.autoInit();
 });
 
 if (typeof window !== 'undefined') {
-  window.HSCarousel = HSCarousel;
+	window.HSCarousel = HSCarousel;
 }

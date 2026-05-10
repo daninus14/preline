@@ -46,9 +46,9 @@ export interface IChartProps {
 	ctx: {
 		opts: ApexOptions;
 	};
-  w: {
-    globals: ApexOptions;
-  };
+	w: {
+		globals: ApexOptions;
+	};
 }
 
 export interface IChartPropsSeries {

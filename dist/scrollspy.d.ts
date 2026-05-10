@@ -28,6 +28,7 @@ declare class HSScrollspy extends HSBasePlugin<IScrollspyOptions> implements ISc
 	private isScrollingDown;
 	private lastScrollTop;
 	private onScrollableScrollListener;
+	private onPopstateListener;
 	private onLinkClickListener;
 	constructor(el: HTMLElement, options?: {});
 	private scrollableScroll;
@@ -35,6 +36,7 @@ declare class HSScrollspy extends HSBasePlugin<IScrollspyOptions> implements ISc
 	private determineScrollDirection;
 	private linkClick;
 	private update;
+	private handlePopstate;
 	private scrollTo;
 	destroy(): void;
 	static getInstance(target: HTMLElement, isInstance?: boolean): any;

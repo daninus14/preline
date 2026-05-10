@@ -1,6 +1,6 @@
 /*
  * HSDropdown
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -14,7 +14,7 @@ import {
 	isIOS,
 	isIpadOS,
 	stringToBoolean,
-} from "../../utils";
+} from '../../utils';
 
 import {
 	autoUpdate,
@@ -24,17 +24,20 @@ import {
 	type Placement,
 	type Strategy,
 	VirtualElement,
-} from "@floating-ui/dom";
+} from '@floating-ui/dom';
 
-import { IDropdown, IHTMLElementFloatingUI } from "../dropdown/interfaces";
-import HSBasePlugin from "../base-plugin";
-import HSAccessibilityObserver from "../accessibility-manager";
-import { ICollectionItem } from "../../interfaces";
-import { IAccessibilityComponent } from "../accessibility-manager/interfaces";
+import { IDropdown, IHTMLElementFloatingUI } from '../dropdown/interfaces';
+import HSBasePlugin from '../base-plugin';
+import HSAccessibilityObserver from '../accessibility-manager';
+import { ICollectionItem } from '../../interfaces';
+import { IAccessibilityComponent } from '../accessibility-manager/interfaces';
 
-import { POSITIONS } from "../../constants";
+import { POSITIONS } from '../../constants';
 
-class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDropdown {
+class HSDropdown
+	extends HSBasePlugin<{}, IHTMLElementFloatingUI>
+	implements IDropdown
+{
 	private static globalListenersInitialized = false;
 
 	private accessibilityComponent: IAccessibilityComponent;
@@ -58,30 +61,31 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 	private onTouchEndListener: ((evt: TouchEvent) => void) | null = null;
 	private onCloserClickListener:
 		| {
-			el: HTMLButtonElement;
-			fn: () => void;
-		}[]
+				el: HTMLButtonElement;
+				fn: () => void;
+		  }[]
 		| null;
 
 	constructor(el: IHTMLElementFloatingUI, options?: {}, events?: {}) {
 		super(el, options, events);
 
-		this.toggle = this.el.querySelector(":scope > .hs-dropdown-toggle") ||
+		this.toggle =
+			this.el.querySelector(':scope > .hs-dropdown-toggle') ||
 			this.el.querySelector(
-				":scope > .hs-dropdown-toggle-wrapper > .hs-dropdown-toggle",
+				':scope > .hs-dropdown-toggle-wrapper > .hs-dropdown-toggle',
 			) ||
 			(this.el.children[0] as HTMLElement);
 		this.closers =
-			Array.from(this.el.querySelectorAll(":scope .hs-dropdown-close")) || null;
-		this.menu = this.el.querySelector(":scope > .hs-dropdown-menu");
-		this.eventMode = getClassProperty(this.el, "--trigger", "click");
-		this.closeMode = getClassProperty(this.el, "--auto-close", "true");
+			Array.from(this.el.querySelectorAll(':scope .hs-dropdown-close')) || null;
+		this.menu = this.el.querySelector(':scope > .hs-dropdown-menu');
+		this.eventMode = getClassProperty(this.el, '--trigger', 'click');
+		this.closeMode = getClassProperty(this.el, '--auto-close', 'true');
 		this.hasAutofocus = stringToBoolean(
-			getClassProperty(this.el, "--has-autofocus", "true") || "true",
+			getClassProperty(this.el, '--has-autofocus', 'true') || 'true',
 		);
 		this.autofocusOnKeyboardOnly = stringToBoolean(
-			getClassProperty(this.el, "--autofocus-on-keyboard-only", "true") ||
-				"true",
+			getClassProperty(this.el, '--autofocus-on-keyboard-only', 'true') ||
+				'true',
 		);
 		this.animationInProcess = false;
 
@@ -113,7 +117,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 			evt.preventDefault();
 
 			const touch = evt.touches[0];
-			const contextMenuEvent = new MouseEvent("contextmenu", {
+			const contextMenuEvent = new MouseEvent('contextmenu', {
 				bubbles: true,
 				cancelable: true,
 				view: window,
@@ -151,11 +155,11 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 			this.onElementMouseEnterListener = () => this.elementMouseEnter();
 			this.onElementMouseLeaveListener = () => this.elementMouseLeave();
 
-			this.el.addEventListener("mouseenter", this.onElementMouseEnterListener);
-			this.el.addEventListener("mouseleave", this.onElementMouseLeaveListener);
+			this.el.addEventListener('mouseenter', this.onElementMouseEnterListener);
+			this.el.addEventListener('mouseleave', this.onElementMouseLeaveListener);
 		}
 
-		if (typeof window !== "undefined") {
+		if (typeof window !== 'undefined') {
 			if (!window.HSAccessibilityObserver) {
 				window.HSAccessibilityObserver = new HSAccessibilityObserver();
 			}
@@ -164,78 +168,80 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 	}
 
 	resizeHandler() {
-		this.eventMode = getClassProperty(this.el, "--trigger", "click");
-		this.closeMode = getClassProperty(this.el, "--auto-close", "true");
+		this.eventMode = getClassProperty(this.el, '--trigger', 'click');
+		this.closeMode = getClassProperty(this.el, '--auto-close', 'true');
 		this.hasAutofocus = stringToBoolean(
-			getClassProperty(this.el, "--has-autofocus", "true") || "true",
+			getClassProperty(this.el, '--has-autofocus', 'true') || 'true',
 		);
 		this.autofocusOnKeyboardOnly = stringToBoolean(
-			getClassProperty(this.el, "--autofocus-on-keyboard-only", "true") ||
-				"true",
+			getClassProperty(this.el, '--autofocus-on-keyboard-only', 'true') ||
+				'true',
 		);
 	}
 
 	private isOpen(): boolean {
-		return this.el.classList.contains("open") &&
-			!this.menu.classList.contains("hidden");
+		return (
+			this.el.classList.contains('open') &&
+			!this.menu.classList.contains('hidden')
+		);
 	}
 
 	private buildToggle() {
 		if (this?.toggle?.ariaExpanded) {
-			if (this.el.classList.contains("open")) this.toggle.ariaExpanded = "true";
-			else this.toggle.ariaExpanded = "false";
+			if (this.el.classList.contains('open')) this.toggle.ariaExpanded = 'true';
+			else this.toggle.ariaExpanded = 'false';
 		}
 
-		if (this.eventMode === "contextmenu") {
+		if (this.eventMode === 'contextmenu') {
 			this.onToggleContextMenuListener = (evt: MouseEvent) =>
 				this.toggleContextMenu(evt);
 			this.onTouchStartListener = this.handleTouchStart.bind(this);
 			this.onTouchEndListener = this.handleTouchEnd.bind(this);
 
 			this.toggle.addEventListener(
-				"contextmenu",
+				'contextmenu',
 				this.onToggleContextMenuListener,
 			);
-			this.toggle.addEventListener("touchstart", this.onTouchStartListener, {
+			this.toggle.addEventListener('touchstart', this.onTouchStartListener, {
 				passive: false,
 			});
-			this.toggle.addEventListener("touchend", this.onTouchEndListener);
-			this.toggle.addEventListener("touchmove", this.onTouchEndListener);
+			this.toggle.addEventListener('touchend', this.onTouchEndListener);
+			this.toggle.addEventListener('touchmove', this.onTouchEndListener);
 		} else {
 			this.onToggleClickListener = (evt) => this.toggleClick(evt);
 
-			this.toggle.addEventListener("click", this.onToggleClickListener);
+			this.toggle.addEventListener('click', this.onToggleClickListener);
 		}
 	}
 
 	private buildMenu() {
-		this.menu.role = this.menu.getAttribute("role") || "menu";
+		this.menu.role = this.menu.getAttribute('role') || 'menu';
 		this.menu.tabIndex = -1;
 
 		const checkboxes = this.menu.querySelectorAll('[role="menuitemcheckbox"]');
 		const radiobuttons = this.menu.querySelectorAll('[role="menuitemradio"]');
 
 		checkboxes.forEach((el: HTMLElement) =>
-			el.addEventListener("click", () => this.selectCheckbox(el))
+			el.addEventListener('click', () => this.selectCheckbox(el)),
 		);
 		radiobuttons.forEach((el: HTMLElement) =>
-			el.addEventListener("click", () => this.selectRadio(el))
+			el.addEventListener('click', () => this.selectRadio(el)),
 		);
 
-		this.menu.addEventListener("click", (evt) => {
+		this.menu.addEventListener('click', (evt) => {
 			const target = evt.target as HTMLElement;
 
 			if (
-				target.tagName === "INPUT" ||
-				target.tagName === "TEXTAREA" ||
-				target.tagName === "SELECT" ||
-				target.tagName === "BUTTON" ||
-				target.tagName === "A" ||
-				target.closest("button") ||
-				target.closest("a") ||
-				target.closest("input") ||
-				target.closest("textarea") ||
-				target.closest("select")
+				target.tagName === 'INPUT' ||
+				target.tagName === 'TEXTAREA' ||
+				target.tagName === 'SELECT' ||
+				target.tagName === 'BUTTON' ||
+				target.tagName === 'A' ||
+				target.closest('button') ||
+				target.closest('a') ||
+				target.closest('input') ||
+				target.closest('textarea') ||
+				target.closest('select')
 			) {
 				return;
 			}
@@ -252,17 +258,17 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 			});
 
 			el.addEventListener(
-				"click",
+				'click',
 				this.onCloserClickListener.find((closer) => closer.el === el).fn,
 			);
 		});
 	}
 
 	private getScrollbarSize() {
-		let div = document.createElement("div");
-		div.style.overflow = "scroll";
-		div.style.width = "100px";
-		div.style.height = "100px";
+		let div = document.createElement('div');
+		div.style.overflow = 'scroll';
+		div.style.width = '100px';
+		div.style.height = '100px';
 		document.body.appendChild(div);
 
 		let scrollbarSize = div.offsetWidth - div.clientWidth;
@@ -282,15 +288,15 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 		HSDropdown.closeCurrentlyOpened();
 
 		if (
-			this.el.classList.contains("open") &&
-			!this.menu.classList.contains("hidden")
+			this.el.classList.contains('open') &&
+			!this.menu.classList.contains('hidden')
 		) {
 			this.close();
 
-			document.body.style.overflow = "";
-			document.body.style.paddingRight = "";
+			document.body.style.overflow = '';
+			document.body.style.paddingRight = '';
 		} else {
-			document.body.style.overflow = "hidden";
+			document.body.style.overflow = 'hidden';
 			document.body.style.paddingRight = `${this.getScrollbarSize()}px`;
 
 			this.open(virtualElement);
@@ -298,15 +304,16 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 	}
 
 	private onClickHandler(evt: Event) {
-		const isMouseHoverTrigger = this.eventMode === "hover" &&
-			window.matchMedia("(hover: hover)").matches &&
-			(evt as PointerEvent).pointerType === "mouse";
+		const isMouseHoverTrigger =
+			this.eventMode === 'hover' &&
+			window.matchMedia('(hover: hover)').matches &&
+			(evt as PointerEvent).pointerType === 'mouse';
 
 		if (isMouseHoverTrigger) {
 			const el = evt.currentTarget as HTMLElement;
-			const isAnchor = el.tagName === "A";
-			const isNavLink = isAnchor && el.hasAttribute("href") &&
-				el.getAttribute("href") !== "#";
+			const isAnchor = el.tagName === 'A';
+			const isNavLink =
+				isAnchor && el.hasAttribute('href') && el.getAttribute('href') !== '#';
 
 			if (!isNavLink) {
 				evt.preventDefault();
@@ -318,8 +325,8 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 		}
 
 		if (
-			this.el.classList.contains("open") &&
-			!this.menu.classList.contains("hidden")
+			this.el.classList.contains('open') &&
+			!this.menu.classList.contains('hidden')
 		) {
 			this.close();
 		} else {
@@ -328,42 +335,40 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 	}
 
 	private onMouseEnterHandler() {
-		if (this.eventMode !== "hover") return false;
+		if (this.eventMode !== 'hover') return false;
 
 		if (
 			!this.el._floatingUI ||
-			(
-				this.el._floatingUI &&
-				!this.el.classList.contains("open")
-			)
-		) this.forceClearState();
+			(this.el._floatingUI && !this.el.classList.contains('open'))
+		)
+			this.forceClearState();
 
 		if (
-			!this.el.classList.contains("open") &&
-			this.menu.classList.contains("hidden")
+			!this.el.classList.contains('open') &&
+			this.menu.classList.contains('hidden')
 		) {
 			this.open();
 		}
 	}
 
 	private onMouseLeaveHandler() {
-		if (this.eventMode !== "hover") return false;
+		if (this.eventMode !== 'hover') return false;
 
 		if (
-			this.el.classList.contains("open") &&
-			!this.menu.classList.contains("hidden")
+			this.el.classList.contains('open') &&
+			!this.menu.classList.contains('hidden')
 		) {
 			this.close();
 		}
 	}
 
 	private destroyFloatingUI() {
-		const scope =
-			(window.getComputedStyle(this.el).getPropertyValue("--scope") || "")
-				.trim();
+		const scope = (
+			window.getComputedStyle(this.el).getPropertyValue('--scope') || ''
+		).trim();
 
-		this.menu.classList.remove("block");
-		this.menu.classList.add("hidden");
+		this.menu.classList.remove('block');
+		this.menu.classList.add('hidden');
 
 		this.menu.style.inset = null;
 		this.menu.style.position = null;
@@ -373,13 +378,13 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 			this.el._floatingUI = null;
 		}
 
-		if (scope === "window") this.el.appendChild(this.menu);
+		if (scope === 'window') this.el.appendChild(this.menu);
 
 		this.animationInProcess = false;
 	}
 
 	private focusElement() {
-		const input: HTMLInputElement = this.menu.querySelector("[autofocus]");
+		const input: HTMLInputElement = this.menu.querySelector('[autofocus]');
 
 		if (input) {
 			input.focus();
@@ -406,25 +411,30 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 		const _target = target || this.el;
 		const computedStyle = window.getComputedStyle(this.el);
 
-		const placementCss = (computedStyle.getPropertyValue("--placement") || "")
-			.trim();
-		const flipCss = (computedStyle.getPropertyValue("--flip") || "true").trim();
-		const strategyCss =
-			(computedStyle.getPropertyValue("--strategy") || "fixed").trim();
-		const offsetCss = (computedStyle.getPropertyValue("--offset") || "10")
-			.trim();
-		const gpuAccelerationCss =
-			(computedStyle.getPropertyValue("--gpu-acceleration") || "true").trim();
-		const adaptive =
-			(window.getComputedStyle(this.el).getPropertyValue("--adaptive") ||
-				"adaptive").replace(" ", "");
+		const placementCss = (
+			computedStyle.getPropertyValue('--placement') || ''
+		).trim();
+		const flipCss = (computedStyle.getPropertyValue('--flip') || 'true').trim();
+		const strategyCss = (
+			computedStyle.getPropertyValue('--strategy') || 'fixed'
+		).trim();
+		const offsetCss = (
+			computedStyle.getPropertyValue('--offset') || '10'
+		).trim();
+		const gpuAccelerationCss = (
+			computedStyle.getPropertyValue('--gpu-acceleration') || 'true'
+		).trim();
+		const adaptive = (
+			window.getComputedStyle(this.el).getPropertyValue('--adaptive') ||
+			'adaptive'
+		).replace(' ', '');
 
 		const strategy = strategyCss as Strategy;
 		const offsetValue = parseInt(offsetCss, 10);
-		const placement: Placement = POSITIONS[placementCss] || "bottom-start";
+		const placement: Placement = POSITIONS[placementCss] || 'bottom-start';
 
 		const middleware = [
-			...(flipCss === "true" ? [flip()] : []),
+			...(flipCss === 'true' ? [flip()] : []),
 			offset(offsetValue),
 		];
 
@@ -434,13 +444,14 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 			middleware,
 		};
 
-		if (strategy === "fixed") Object.assign(this.menu.style, { position: strategy });
+		if (strategy === 'fixed')
+			Object.assign(this.menu.style, { position: strategy });
 
 		const checkSpaceAndAdjust = (x: number) => {
 			const menuRect = this.menu.getBoundingClientRect();
 			const viewportWidth = window.innerWidth;
-			const scrollbarWidth = window.innerWidth -
-				document.documentElement.clientWidth;
+			const scrollbarWidth =
+				window.innerWidth - document.documentElement.clientWidth;
 			const availableWidth = viewportWidth - scrollbarWidth;
 
 			if (x + menuRect.width > availableWidth) {
@@ -457,27 +468,27 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 				({ x, y, placement: computedPlacement }) => {
 					const adjustedX = checkSpaceAndAdjust(x);
 
-					if (strategy === "absolute" && adaptive === "none") {
+					if (strategy === 'absolute' && adaptive === 'none') {
 						Object.assign(this.menu.style, {
 							position: strategy,
-							margin: "0",
+							margin: '0',
 						});
-					} else if (strategy === "absolute") {
+					} else if (strategy === 'absolute') {
 						Object.assign(this.menu.style, {
 							position: strategy,
 							transform: `translate3d(${x}px, ${y}px, 0px)`,
-							margin: "0",
+							margin: '0',
 						});
 					} else {
-						if (gpuAccelerationCss === "true") {
+						if (gpuAccelerationCss === 'true') {
 							Object.assign(this.menu.style, {
 								position: strategy,
-								left: "",
-								top: "",
-								inset: "0px auto auto 0px",
-								margin: "0",
+								left: '',
+								top: '',
+								inset: '0px auto auto 0px',
+								margin: '0',
 								transform: `translate3d(${
-									adaptive === "adaptive" ? adjustedX : 0
+									adaptive === 'adaptive' ? adjustedX : 0
 								}px, ${y}px, 0)`,
 							});
 						} else {
@@ -485,12 +496,12 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 								position: strategy,
 								left: `${x}px`,
 								top: `${y}px`,
-								transform: "",
+								transform: '',
 							});
 						}
 					}
 
-					this.menu.setAttribute("data-placement", computedPlacement);
+					this.menu.setAttribute('data-placement', computedPlacement);
 				},
 			);
 		};
@@ -506,25 +517,25 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 	}
 
 	private selectCheckbox(target: HTMLElement) {
-		target.ariaChecked = target.ariaChecked === "true" ? "false" : "true";
+		target.ariaChecked = target.ariaChecked === 'true' ? 'false' : 'true';
 	}
 
 	private selectRadio(target: HTMLElement) {
-		if (target.ariaChecked === "true") return false;
-		const group = target.closest(".group");
+		if (target.ariaChecked === 'true') return false;
+		const group = target.closest('.group');
 		const items = group.querySelectorAll('[role="menuitemradio"]');
 		const otherItems = Array.from(items).filter((el) => el !== target);
 		otherItems.forEach((el) => {
-			el.ariaChecked = "false";
+			el.ariaChecked = 'false';
 		});
-		target.ariaChecked = "true";
+		target.ariaChecked = 'true';
 	}
 
 	// Public methods
 	// TODO:: rename "Popper" to "FLoatingUI"
 	public calculatePopperPosition(target?: VirtualElement | HTMLElement) {
 		const floatingUIInstance = this.setupFloatingUI(target);
-		const floatingUIPosition = this.menu.getAttribute("data-placement");
+		const floatingUIPosition = this.menu.getAttribute('data-placement');
 
 		floatingUIInstance.update();
 		floatingUIInstance.destroy();
@@ -536,34 +547,35 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 		target?: VirtualElement | HTMLElement,
 		openedViaKeyboard: boolean = false,
 	) {
-		if (this.el.classList.contains("open") || this.animationInProcess) {
+		if (this.el.classList.contains('open') || this.animationInProcess) {
 			return false;
 		}
 
 		this.openedViaKeyboard = openedViaKeyboard;
 		this.animationInProcess = true;
-		this.menu.style.cssText = "";
+		this.menu.style.cssText = '';
 
 		const _target = target || this.el;
 		const computedStyle = window.getComputedStyle(this.el);
-		const scope = (computedStyle.getPropertyValue("--scope") || "").trim();
-		const strategyCss =
-			(computedStyle.getPropertyValue("--strategy") || "fixed").trim();
+		const scope = (computedStyle.getPropertyValue('--scope') || '').trim();
+		const strategyCss = (
+			computedStyle.getPropertyValue('--strategy') || 'fixed'
+		).trim();
 		const strategy = strategyCss as Strategy;
 
-		if (scope === "window") document.body.appendChild(this.menu);
+		if (scope === 'window') document.body.appendChild(this.menu);
 
-		if (strategy !== ("static" as Strategy)) {
+		if (strategy !== ('static' as Strategy)) {
 			this.el._floatingUI = this.setupFloatingUI(_target);
 		}
 
 		this.menu.style.margin = null;
-		this.menu.classList.remove("hidden");
-		this.menu.classList.add("block");
+		this.menu.classList.remove('hidden');
+		this.menu.classList.add('block');
 
 		setTimeout(() => {
-			if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = "true";
-			this.el.classList.add("open");
+			if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = 'true';
+			this.el.classList.add('open');
 
 			if (window.HSAccessibilityObserver && this.accessibilityComponent) {
 				window.HSAccessibilityObserver.updateComponentState(
@@ -572,43 +584,44 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 				);
 			}
 
-			if (scope === "window") this.menu.classList.add("open");
+			if (scope === 'window') this.menu.classList.add('open');
 
 			this.animationInProcess = false;
 
 			if (
 				this.hasAutofocus &&
 				(!this.autofocusOnKeyboardOnly || this.openedViaKeyboard)
-			) this.focusElement();
+			)
+				this.focusElement();
 
-			this.fireEvent("open", this.el);
-			dispatch("open.hs.dropdown", this.el, this.el);
+			this.fireEvent('open', this.el);
+			dispatch('open.hs.dropdown', this.el, this.el);
 		});
 	}
 
 	public close(isAnimated = true) {
-		if (this.animationInProcess || !this.el.classList.contains("open")) {
+		if (this.animationInProcess || !this.el.classList.contains('open')) {
 			return false;
 		}
 
-		const scope =
-			(window.getComputedStyle(this.el).getPropertyValue("--scope") || "")
-				.trim();
+		const scope = (
+			window.getComputedStyle(this.el).getPropertyValue('--scope') || ''
+		).trim();
 
 		const clearAfterClose = () => {
 			this.menu.style.margin = null;
-			if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = "false";
-			this.el.classList.remove("open");
+			if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = 'false';
+			this.el.classList.remove('open');
 
 			this.openedViaKeyboard = false;
 
-			this.fireEvent("close", this.el);
-			dispatch("close.hs.dropdown", this.el, this.el);
+			this.fireEvent('close', this.el);
+			dispatch('close.hs.dropdown', this.el, this.el);
 		};
 
 		this.animationInProcess = true;
 
-		if (scope === "window") this.menu.classList.remove("open");
+		if (scope === 'window') this.menu.classList.remove('open');
 
 		if (window.HSAccessibilityObserver && this.accessibilityComponent) {
 			window.HSAccessibilityObserver.updateComponentState(
@@ -619,7 +632,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 
 		if (isAnimated) {
 			const el: HTMLElement =
-				this.el.querySelector("[data-hs-dropdown-transition]") || this.menu;
+				this.el.querySelector('[data-hs-dropdown-transition]') || this.menu;
 			let hasCompleted = false;
 
 			const completeClose = () => {
@@ -634,7 +647,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 
 			const computedStyle = window.getComputedStyle(el);
 			const transitionDuration = computedStyle.getPropertyValue(
-				"transition-duration",
+				'transition-duration',
 			);
 			const duration = parseFloat(transitionDuration) * 1000 || 150;
 
@@ -650,8 +663,8 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 		this.destroyFloatingUI();
 
 		this.menu.style.margin = null;
-		this.el.classList.remove("open");
-		this.menu.classList.add("hidden");
+		this.el.classList.remove('open');
+		this.menu.classList.add('hidden');
 
 		this.openedViaKeyboard = false;
 	}
@@ -660,11 +673,11 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 		// Remove listeners
 		if (!isIOS() && !isIpadOS()) {
 			this.el.removeEventListener(
-				"mouseenter",
+				'mouseenter',
 				this.onElementMouseEnterListener,
 			);
 			this.el.removeEventListener(
-				"mouseleave",
+				'mouseleave',
 				() => this.onElementMouseLeaveListener,
 			);
 
@@ -672,18 +685,18 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 			this.onElementMouseLeaveListener = null;
 		}
 
-		if (this.eventMode === "contextmenu") {
+		if (this.eventMode === 'contextmenu') {
 			if (this.toggle) {
 				this.toggle.removeEventListener(
-					"contextmenu",
+					'contextmenu',
 					this.onToggleContextMenuListener,
 				);
 				this.toggle.removeEventListener(
-					"touchstart",
+					'touchstart',
 					this.onTouchStartListener,
 				);
-				this.toggle.removeEventListener("touchend", this.onTouchEndListener);
-				this.toggle.removeEventListener("touchmove", this.onTouchEndListener);
+				this.toggle.removeEventListener('touchend', this.onTouchEndListener);
+				this.toggle.removeEventListener('touchmove', this.onTouchEndListener);
 			}
 
 			this.onToggleContextMenuListener = null;
@@ -691,7 +704,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 			this.onTouchEndListener = null;
 		} else {
 			if (this.toggle) {
-				this.toggle.removeEventListener("click", this.onToggleClickListener);
+				this.toggle.removeEventListener('click', this.onToggleClickListener);
 			}
 
 			this.onToggleClickListener = null;
@@ -700,7 +713,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 		if (this.closers.length) {
 			this.closers.forEach((el: HTMLButtonElement) => {
 				el.removeEventListener(
-					"click",
+					'click',
 					this.onCloserClickListener.find((closer) => closer.el === el).fn,
 				);
 			});
@@ -709,13 +722,13 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 		}
 
 		// Remove classes
-		this.el.classList.remove("open");
+		this.el.classList.remove('open');
 
 		this.destroyFloatingUI();
 
-		window.$hsDropdownCollection = window.$hsDropdownCollection.filter((
-			{ element },
-		) => element.el !== this.el);
+		window.$hsDropdownCollection = window.$hsDropdownCollection.filter(
+			({ element }) => element.el !== this.el,
+		);
 
 		// Unregister accessibility
 		// if (typeof window !== "undefined" && window.HSAccessibilityObserver) {
@@ -727,25 +740,27 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 	private static findInCollection(
 		target: HSDropdown | HTMLElement | string,
 	): ICollectionItem<HSDropdown> | null {
-		return window.$hsDropdownCollection.find((el) => {
-			if (target instanceof HSDropdown) return el.element.el === target.el;
-			else if (typeof target === "string") {
-				return el.element.el === document.querySelector(target);
-			} else return el.element.el === target;
-		}) || null;
+		return (
+			window.$hsDropdownCollection.find((el) => {
+				if (target instanceof HSDropdown) return el.element.el === target.el;
+				else if (typeof target === 'string') {
+					return el.element.el === document.querySelector(target);
+				} else return el.element.el === target;
+			}) || null
+		);
 	}
 
 	static getInstance(target: HTMLElement | string, isInstance?: boolean) {
 		const elInCollection = window.$hsDropdownCollection.find(
 			(el) =>
 				el.element.el ===
-					(typeof target === "string"
-						? document.querySelector(target)
-						: target),
+				(typeof target === 'string' ? document.querySelector(target) : target),
 		);
 
 		return elInCollection
-			? isInstance ? elInCollection : elInCollection.element
+			? isInstance
+				? elInCollection
+				: elInCollection.element
 			: null;
 	}
 
@@ -759,7 +774,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 		}
 
 		document
-			.querySelectorAll(".hs-dropdown:not(.--prevent-on-load-init)")
+			.querySelectorAll('.hs-dropdown:not(.--prevent-on-load-init)')
 			.forEach((el: IHTMLElementFloatingUI) => {
 				if (
 					!window.$hsDropdownCollection.find(
@@ -772,7 +787,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 	}
 
 	private static ensureGlobalHandlers() {
-		if (typeof window === "undefined") return;
+		if (typeof window === 'undefined') return;
 
 		if (!window.$hsDropdownCollection) window.$hsDropdownCollection = [];
 
@@ -780,14 +795,14 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 
 		HSDropdown.globalListenersInitialized = true;
 
-		window.addEventListener("click", (evt) => {
+		window.addEventListener('click', (evt) => {
 			const evtTarget = evt.target;
 
 			HSDropdown.closeCurrentlyOpened(evtTarget as HTMLElement);
 		});
 
 		let prevWidth = window.innerWidth;
-		window.addEventListener("resize", () => {
+		window.addEventListener('resize', () => {
 			if (window.innerWidth !== prevWidth) {
 				prevWidth = innerWidth;
 				HSDropdown.closeCurrentlyOpened(null, false);
@@ -801,55 +816,52 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 	) {
 		const instance = HSDropdown.findInCollection(target);
 
-		if (
-			instance &&
-			instance.element.menu.classList.contains("hidden")
-		) instance.element.open(undefined, openedViaKeyboard);
+		if (instance && instance.element.menu.classList.contains('hidden'))
+			instance.element.open(undefined, openedViaKeyboard);
 	}
 
 	static close(target: HSDropdown | HTMLElement | string) {
 		const instance = HSDropdown.findInCollection(target);
 
-		if (
-			instance &&
-			!instance.element.menu.classList.contains("hidden")
-		) instance.element.close();
+		if (instance && !instance.element.menu.classList.contains('hidden'))
+			instance.element.close();
 	}
 
 	static closeCurrentlyOpened(
 		evtTarget: HTMLElement | null = null,
 		isAnimated = true,
 	) {
-		const parent = evtTarget &&
-				evtTarget.closest(".hs-dropdown") &&
-				evtTarget.closest(".hs-dropdown").parentElement.closest(".hs-dropdown")
-			? evtTarget
-				.closest(".hs-dropdown")
-				.parentElement.closest(".hs-dropdown")
-			: null;
+		const parent =
+			evtTarget &&
+			evtTarget.closest('.hs-dropdown') &&
+			evtTarget.closest('.hs-dropdown').parentElement.closest('.hs-dropdown')
+				? evtTarget
+						.closest('.hs-dropdown')
+						.parentElement.closest('.hs-dropdown')
+				: null;
 		let currentlyOpened = parent
 			? window.$hsDropdownCollection.filter(
-				(el) =>
-					el.element.el.classList.contains("open") &&
-					el.element.menu
-							.closest(".hs-dropdown")
-							.parentElement.closest(".hs-dropdown") === parent,
-			)
+					(el) =>
+						el.element.el.classList.contains('open') &&
+						el.element.menu
+							.closest('.hs-dropdown')
+							.parentElement.closest('.hs-dropdown') === parent,
+				)
 			: window.$hsDropdownCollection.filter((el) =>
-				el.element.el.classList.contains("open")
-			);
+					el.element.el.classList.contains('open'),
+				);
 
 		if (evtTarget) {
-			const dropdownElement = evtTarget.closest(".hs-dropdown") as HTMLElement;
+			const dropdownElement = evtTarget.closest('.hs-dropdown') as HTMLElement;
 
 			if (dropdownElement) {
-				if (getClassPropertyAlt(dropdownElement, "--auto-close") === "inside") {
+				if (getClassPropertyAlt(dropdownElement, '--auto-close') === 'inside') {
 					currentlyOpened = currentlyOpened.filter(
 						(el) => el.element.el !== dropdownElement,
 					);
 				}
 			} else {
-				const dropdownMenu = evtTarget.closest(".hs-dropdown-menu");
+				const dropdownMenu = evtTarget.closest('.hs-dropdown-menu');
 
 				if (dropdownMenu) {
 					const originalDropdown = window.$hsDropdownCollection.find(
@@ -858,8 +870,8 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 
 					if (
 						originalDropdown &&
-						getClassPropertyAlt(originalDropdown.element.el, "--auto-close") ===
-							"inside"
+						getClassPropertyAlt(originalDropdown.element.el, '--auto-close') ===
+							'inside'
 					) {
 						currentlyOpened = currentlyOpened.filter(
 							(el) => el.element.el !== originalDropdown.element.el,
@@ -872,8 +884,8 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 		if (currentlyOpened) {
 			currentlyOpened.forEach((el) => {
 				if (
-					el.element.closeMode === "false" ||
-					el.element.closeMode === "outside"
+					el.element.closeMode === 'false' ||
+					el.element.closeMode === 'outside'
 				) {
 					return false;
 				}
@@ -884,30 +896,30 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 
 		if (currentlyOpened) {
 			currentlyOpened.forEach((el) => {
-				if (getClassPropertyAlt(el.element.el, "--trigger") !== "contextmenu") {
+				if (getClassPropertyAlt(el.element.el, '--trigger') !== 'contextmenu') {
 					return false;
 				}
 
-				document.body.style.overflow = "";
-				document.body.style.paddingRight = "";
+				document.body.style.overflow = '';
+				document.body.style.paddingRight = '';
 			});
 		}
 	}
 
 	// Accessibility methods
 	private setupAccessibility(): void {
-		this.accessibilityComponent = window.HSAccessibilityObserver
-			.registerComponent(
+		this.accessibilityComponent =
+			window.HSAccessibilityObserver.registerComponent(
 				this.el,
 				{
 					onEnter: () => {
 						const active = document.activeElement as HTMLElement | null;
 						if (!active) return;
 
-						const menuRoot = active.closest(".hs-dropdown-menu");
+						const menuRoot = active.closest('.hs-dropdown-menu');
 						if (menuRoot) {
 							const submenuToggle = active.closest<HTMLElement>(
-								".hs-dropdown-toggle, [data-hs-dropdown-toggle]",
+								'.hs-dropdown-toggle, [data-hs-dropdown-toggle]',
 							);
 
 							if (submenuToggle) {
@@ -926,14 +938,15 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 										child.matches(
 											"input[type='checkbox']:not([hidden]), input[type='radio']:not([hidden])",
 										)
-									) (child as HTMLElement).click();
+									)
+										(child as HTMLElement).click();
 								});
 
 								item.focus();
 
 								return;
 							} else if (item) {
-								if (active.matches("input, textarea, select")) return;
+								if (active.matches('input, textarea, select')) return;
 
 								item.click();
 							}
@@ -957,18 +970,18 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 						if (evt.metaKey) return;
 
 						switch (evt.key) {
-							case "ArrowDown":
+							case 'ArrowDown':
 								if (!this.isOpened()) this.open(undefined, true);
-								else this.focusMenuItem("next");
+								else this.focusMenuItem('next');
 								break;
-							case "ArrowUp":
-								if (this.isOpened()) this.focusMenuItem("prev");
+							case 'ArrowUp':
+								if (this.isOpened()) this.focusMenuItem('prev');
 								break;
-							case "ArrowRight":
-								this.onArrowX(evt, "right");
+							case 'ArrowRight':
+								this.onArrowX(evt, 'right');
 								break;
-							case "ArrowLeft":
-								this.onArrowX(evt, "left");
+							case 'ArrowLeft':
+								this.onArrowX(evt, 'left');
 								break;
 						}
 					},
@@ -981,11 +994,11 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 					onTab: () => {
 						setTimeout(() => {
 							const active = document.activeElement as HTMLElement | null;
-							const menuRoot = active.closest(".hs-dropdown-menu");
+							const menuRoot = active.closest('.hs-dropdown-menu');
 
 							if (active && menuRoot) {
 								const submenuToggle = active.closest<HTMLElement>(
-									".hs-dropdown-toggle, [data-hs-dropdown-toggle]",
+									'.hs-dropdown-toggle, [data-hs-dropdown-toggle]',
 								);
 
 								if (submenuToggle) {
@@ -1003,18 +1016,18 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 					},
 					onFirstLetter: (key: string) => {
 						const active = document.activeElement as HTMLElement | null;
-						const isInput = active?.matches("input, textarea");
+						const isInput = active?.matches('input, textarea');
 
 						if (!isInput && this.isOpened()) this.onFirstLetter(key);
 					},
 				},
 				this.isOpened(),
-				"Dropdown",
-				".hs-dropdown",
+				'Dropdown',
+				'.hs-dropdown',
 				this.menu,
 				{
-					onFirstLetter: false
-				}
+					onFirstLetter: false,
+				},
 			);
 	}
 
@@ -1035,7 +1048,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 			const index = (currentIndex + i) % menuItems.length;
 			const text =
 				(menuItems[index] as HTMLElement).textContent?.trim().toLowerCase() ||
-				"";
+				'';
 
 			if (text.startsWith(key.toLowerCase())) {
 				(menuItems[index] as HTMLElement).focus();
@@ -1047,7 +1060,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 		(menuItems[0] as HTMLElement).focus();
 	}
 
-	private onArrowX(evt: KeyboardEvent, direction: "left" | "right"): void {
+	private onArrowX(evt: KeyboardEvent, direction: 'left' | 'right'): void {
 		if (!this.isOpened()) return;
 
 		evt.preventDefault();
@@ -1064,7 +1077,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 		);
 		let nextIndex = -1;
 
-		if (direction === "right") {
+		if (direction === 'right') {
 			nextIndex = (currentIndex + 1) % menuItems.length;
 		} else {
 			nextIndex = currentIndex > 0 ? currentIndex - 1 : menuItems.length - 1;
@@ -1086,7 +1099,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 		(menuItems[index] as HTMLElement).focus();
 	}
 
-	private focusMenuItem(direction: "next" | "prev"): void {
+	private focusMenuItem(direction: 'next' | 'prev'): void {
 		const menuItems = this.menu.querySelectorAll(
 			'a:not([hidden]), button:not([hidden]), [role="menuitem"]:not([hidden])',
 		);
@@ -1096,9 +1109,10 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 		const currentIndex = Array.from(menuItems).indexOf(
 			document.activeElement as HTMLElement,
 		);
-		const nextIndex = direction === "next"
-			? (currentIndex + 1) % menuItems.length
-			: (currentIndex - 1 + menuItems.length) % menuItems.length;
+		const nextIndex =
+			direction === 'next'
+				? (currentIndex + 1) % menuItems.length
+				: (currentIndex - 1 + menuItems.length) % menuItems.length;
 		(menuItems[nextIndex] as HTMLElement).focus();
 	}
 

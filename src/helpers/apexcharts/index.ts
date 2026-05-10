@@ -1,5 +1,5 @@
 /*
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -29,11 +29,11 @@ function buildTooltip(props: IChartProps, options: IBuildTooltipHelperOptions) {
 		wrapperExtClasses = '',
 		seriesClasses = 'text-xs',
 		seriesExtClasses = '',
-		titleClasses = 'font-semibold !text-sm !bg-white !border-gray-200 text-gray-800 rounded-t-lg dark:!bg-neutral-800 dark:!border-neutral-700 dark:text-neutral-200',
+		titleClasses = 'font-semibold text-sm! bg-white! border-gray-200! text-gray-800 rounded-t-lg dark:bg-neutral-800! dark:border-neutral-700! dark:text-neutral-200',
 		titleExtClasses = '',
-		markerClasses = '!w-2.5 !h-2.5 !me-1.5',
-		markerExtClasses = '!rounded-xs',
-		valueClasses = '!font-medium text-gray-500 !ms-auto dark:text-neutral-400',
+		markerClasses = 'w-2.5! h-2.5! me-1.5!',
+		markerExtClasses = 'rounded-xs!',
+		valueClasses = 'font-medium! text-gray-500 ms-auto! dark:text-neutral-400',
 		valueExtClasses = '',
 		labelClasses = 'text-gray-500 dark:text-neutral-400',
 		labelExtClasses = '',
@@ -73,14 +73,14 @@ function buildTooltip(props: IChartProps, options: IBuildTooltipHelperOptions) {
 		const labelMarkup = `<span class="apexcharts-tooltip-text-y-label ${labelClasses} ${labelExtClasses}">${groupData.left}</span>`;
 
 		seriesGroups += `<div class="apexcharts-tooltip-series-group !flex ${
-			hasTextLabel ? '!justify-between' : ''
+			hasTextLabel ? 'justify-between!' : ''
 		} order-${i + 1} ${seriesClasses} ${seriesExtClasses}">
       <span class="flex items-center">
         <span class="apexcharts-tooltip-marker ${markerClasses} ${markerExtClasses}" style="background: ${
 					colors[i]
 				}"></span>
         <div class="apexcharts-tooltip-text">
-          <div class="apexcharts-tooltip-y-group !py-0.5">
+          <div class="apexcharts-tooltip-y-group py-0.5!">
             <span class="apexcharts-tooltip-text-y-value ${valueClasses} ${valueExtClasses}">${groupData.right}</span>
           </div>
         </div>
@@ -108,10 +108,10 @@ function buildHeatmapTooltip(
 		divider = '',
 		wrapperClasses = 'ms-0.5 mb-2 bg-white border border-gray-200 text-gray-800 rounded-lg shadow-md dark:bg-neutral-800 dark:border-neutral-700',
 		wrapperExtClasses = '',
-		markerClasses = '!w-2.5 !h-2.5 !me-1.5',
+		markerClasses = 'w-2.5! h-2.5! me-1.5!',
 		markerStyles = '',
-		markerExtClasses = '!rounded-xs',
-		valueClasses = '!font-medium text-gray-500 !ms-auto dark:text-neutral-400',
+		markerExtClasses = 'rounded-xs!',
+		valueClasses = 'font-medium! text-gray-500 ms-auto! dark:text-neutral-400',
 		valueExtClasses = '',
 	} = options;
 	const { dataPointIndex, seriesIndex, series } = props;
@@ -123,11 +123,11 @@ function buildHeatmapTooltip(
 	return `<div class="${
 		mode === 'dark' ? 'dark ' : ''
 	}${wrapperClasses} ${wrapperExtClasses}">
-    <div class="apexcharts-tooltip-series-group !flex">
+    <div class="apexcharts-tooltip-series-group flex!">
 			<span class="apexcharts-tooltip-marker ${markerClasses} ${markerExtClasses}" style="${markerStyles}"></span>
       <span class="flex items-center">
         <div class="apexcharts-tooltip-text">
-          <div class="apexcharts-tooltip-y-group !py-0.5">
+          <div class="apexcharts-tooltip-y-group py-0.5!">
             <span class="apexcharts-tooltip-text-y-value ${valueClasses} ${valueExtClasses}">${name}${divider}</span>
           </div>
         </div>
@@ -152,13 +152,13 @@ function buildTooltipCompareTwo(
 		labelDivider = '',
 		wrapperClasses = 'ms-0.5 mb-2 bg-white border border-gray-200 text-gray-800 rounded-lg shadow-md dark:bg-neutral-800 dark:border-neutral-700',
 		wrapperExtClasses = '',
-		seriesClasses = '!justify-between w-full text-xs',
+		seriesClasses = 'justify-between! w-full text-xs',
 		seriesExtClasses = '',
-		titleClasses = 'flex justify-between font-semibold !text-sm !bg-white !border-gray-200 text-gray-800 rounded-t-lg dark:!bg-neutral-800 dark:!border-neutral-700 dark:text-neutral-200',
+		titleClasses = 'flex justify-between font-semibold text-sm! bg-white! border-gray-200! text-gray-800 rounded-t-lg dark:bg-neutral-800! dark:border-neutral-700! dark:text-neutral-200',
 		titleExtClasses = '',
-		markerClasses = '!w-2.5 !h-2.5 !me-1.5',
-		markerExtClasses = '!rounded-xs',
-		valueClasses = '!font-medium text-gray-500 !ms-auto dark:text-neutral-400',
+		markerClasses = 'w-2.5! h-2.5! me-1.5!',
+		markerExtClasses = 'rounded-xs!',
+		valueClasses = 'font-medium! text-gray-500 ms-auto! dark:text-neutral-400',
 		valueExtClasses = '',
 		labelClasses = 'text-gray-500 dark:text-neutral-400 ms-2',
 		labelExtClasses = '',
@@ -218,7 +218,7 @@ function buildTooltipCompareTwo(
 					colors[i]
 				}"></span>
         <div class="apexcharts-tooltip-text">
-          <div class="apexcharts-tooltip-y-group !py-0.5">
+          <div class="apexcharts-tooltip-y-group py-0.5!">
             ${valueMarkup}
           </div>
         </div>
@@ -264,13 +264,13 @@ function buildTooltipCompareTwoAlt(
 		labelDivider = '',
 		wrapperClasses = 'ms-0.5 mb-2 bg-white border border-gray-200 text-gray-800 rounded-lg shadow-md dark:bg-neutral-800 dark:border-neutral-700',
 		wrapperExtClasses = '',
-		seriesClasses = '!justify-between w-full text-xs',
+		seriesClasses = 'justify-between! w-full text-xs',
 		seriesExtClasses = '',
-		titleClasses = 'flex justify-between font-semibold !text-sm !bg-white !border-gray-200 text-gray-800 rounded-t-lg dark:!bg-neutral-800 dark:!border-neutral-700 dark:text-neutral-200',
+		titleClasses = 'flex justify-between font-semibold text-sm! bg-white! border-gray-200! text-gray-800 rounded-t-lg dark:bg-neutral-800! dark:border-neutral-700! dark:text-neutral-200',
 		titleExtClasses = '',
-		markerClasses = '!w-2.5 !h-2.5 !me-1.5',
-		markerExtClasses = '!rounded-xs',
-		valueClasses = '!font-medium text-gray-500 !ms-auto dark:text-neutral-400',
+		markerClasses = 'w-2.5! h-2.5! me-1.5!',
+		markerExtClasses = 'rounded-xs!',
+		valueClasses = 'font-medium! text-gray-500 ms-auto! dark:text-neutral-400',
 		valueExtClasses = '',
 		labelClasses = 'text-gray-500 dark:text-neutral-400 ms-2',
 		labelExtClasses = '',
@@ -322,7 +322,7 @@ function buildTooltipCompareTwoAlt(
 					colors[i]
 				}"></span>
         <div class="apexcharts-tooltip-text text-xs">
-          <div class="apexcharts-tooltip-y-group !py-0.5">
+          <div class="apexcharts-tooltip-y-group py-0.5!">
             <span class="apexcharts-tooltip-text-y-value ${valueClasses} ${valueExtClasses}">${newCategory} ${
 							label || ''
 						}${labelDivider}</span>
@@ -439,12 +439,11 @@ function buildChart(
 		let hasInitProgressApplied = false;
 
 		const handleThemeChange = (evt: EventWithProps) => {
-      if (isInitialLoad) return;
+			if (isInitialLoad) return;
 
 			chart.updateOptions(optionsFn(evt.detail));
 
-			// If the chart is in an iframe, dispatch a resize event to the parent window
-			if (window.self !== window.top) window.dispatchEvent(new Event('resize'));
+			window.dispatchEvent(new Event('resize'));
 		};
 		const applyOptionsChange = (detail: any) => {
 			let modeFromBodyClass;
@@ -601,11 +600,14 @@ function fullBarHoverEffect(
 	svg.addEventListener('mouseleave', hide);
 }
 
-function cssVarToValue(name: string, context: HTMLElement = document.documentElement): string | null {
-  const value = getComputedStyle(context).getPropertyValue(name);
-	
-  if (!value) return null;
-	
+function cssVarToValue(
+	name: string,
+	context: HTMLElement = document.documentElement,
+): string | null {
+	const value = getComputedStyle(context).getPropertyValue(name);
+
+	if (!value) return null;
+
 	return value.trim();
 }
 
@@ -616,6 +618,6 @@ export {
 	buildTooltipCompareTwo,
 	buildTooltipCompareTwoAlt,
 	buildTooltipForDonut,
-  fullBarHoverEffect,
-	cssVarToValue
+	fullBarHoverEffect,
+	cssVarToValue,
 };

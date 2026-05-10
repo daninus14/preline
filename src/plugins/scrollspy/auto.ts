@@ -1,9 +1,9 @@
-import HSScrollspy from "./core";
+import HSScrollspy from './core';
 
 window.addEventListener('load', () => {
-  HSScrollspy.autoInit();
+	HSScrollspy.autoInit();
 });
 
 if (typeof window !== 'undefined') {
-  window.HSScrollspy = HSScrollspy;
+	window.HSScrollspy = HSScrollspy;
 }

@@ -1,4 +1,4 @@
-import type INoUiSlider from "nouislider";
+import type INoUiSlider from 'nouislider';
 
 declare global {
 	var noUiSlider: typeof INoUiSlider;

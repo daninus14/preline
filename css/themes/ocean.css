@@ -89,6 +89,9 @@
   --chart-colors-chart-9-hex-inverse: var(--color-gray-500);
   --chart-colors-chart-10-inverse: var(--color-gray-700);
   --chart-colors-chart-10-hex-inverse: var(--color-gray-700);
+  --chart-colors-xaxis-labels-inverse: var(--color-gray-400);
+  --chart-colors-yaxis-labels-inverse: var(--color-gray-400);
+  --chart-colors-grid-border-inverse: var(--color-gray-700);
   --chart-colors-candlestick-upward: var(--color-primary-600);
   --chart-colors-candlestick-upward-inverse: var(--color-primary-500);
   --chart-colors-candlestick-downward: var(--color-primary-600);

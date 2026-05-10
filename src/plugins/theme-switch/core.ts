@@ -1,18 +1,21 @@
 /*
  * HSThemeSwitch
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { IThemeSwitch, IThemeSwitchOptions } from "../theme-switch/interfaces";
+import { IThemeSwitch, IThemeSwitchOptions } from '../theme-switch/interfaces';
 
-import HSBasePlugin from "../base-plugin";
+import HSBasePlugin from '../base-plugin';
 
-class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> implements IThemeSwitch {
+class HSThemeSwitch
+	extends HSBasePlugin<IThemeSwitchOptions>
+	implements IThemeSwitch
+{
 	public theme: string;
-	public type: "change" | "click";
+	public type: 'change' | 'click';
 
 	private onElementChangeListener: (evt: Event) => void;
 	private onElementClickListener: () => void;
@@ -27,22 +30,22 @@ class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> implements IThemeS
 	) {
 		super(el, options);
 
-		const data = el.getAttribute("data-hs-theme-switch");
+		const data = el.getAttribute('data-hs-theme-switch');
 		const dataOptions: IThemeSwitchOptions = data ? JSON.parse(data) : {};
 		const concatOptions = {
 			...dataOptions,
 			...options,
 		};
 
-		this.theme = concatOptions?.theme || localStorage.getItem("hs_theme") ||
-			"default";
-		this.type = concatOptions?.type || "change";
+		this.theme =
+			concatOptions?.theme || localStorage.getItem('hs_theme') || 'default';
+		this.type = concatOptions?.type || 'change';
 
 		this.init();
 	}
 
 	private elementChange(evt: Event) {
-		const theme = (evt.target as HTMLInputElement).checked ? "dark" : "default";
+		const theme = (evt.target as HTMLInputElement).checked ? 'dark' : 'default';
 
 		this.setAppearance(theme);
 		this.toggleObserveSystemTheme();
@@ -56,36 +59,36 @@ class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> implements IThemeS
 	private init() {
 		this.createCollection(window.$hsThemeSwitchCollection, this);
 
-		if (this.theme !== "default") this.setAppearance();
+		if (this.theme !== 'default') this.setAppearance();
 
-		if (this.type === "click") this.buildSwitchTypeOfClick();
+		if (this.type === 'click') this.buildSwitchTypeOfClick();
 		else this.buildSwitchTypeOfChange();
 	}
 
 	private buildSwitchTypeOfChange() {
-		(this.el as HTMLInputElement).checked = this.theme === "dark";
+		(this.el as HTMLInputElement).checked = this.theme === 'dark';
 
 		this.toggleObserveSystemTheme();
 
 		this.onElementChangeListener = (evt) => this.elementChange(evt);
 
-		this.el.addEventListener("change", this.onElementChangeListener);
+		this.el.addEventListener('change', this.onElementChangeListener);
 	}
 
 	private buildSwitchTypeOfClick() {
-		const theme = this.el.getAttribute("data-hs-theme-click-value");
+		const theme = this.el.getAttribute('data-hs-theme-click-value');
 
 		this.toggleObserveSystemTheme();
 
 		this.onElementClickListener = () => this.elementClick(theme);
 
-		this.el.addEventListener("click", this.onElementClickListener);
+		this.el.addEventListener('click', this.onElementClickListener);
 	}
 
 	private setResetStyles() {
-		const style = document.createElement("style");
+		const style = document.createElement('style');
 		style.innerText = `*{transition: unset !important;}`;
-		style.setAttribute("data-hs-appearance-onload-styles", "");
+		style.setAttribute('data-hs-appearance-onload-styles', '');
 
 		document.head.appendChild(style);
 
@@ -97,29 +100,29 @@ class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> implements IThemeS
 
 		HSThemeSwitch.systemThemeObserver = (e: MediaQueryListEvent) => {
 			window.$hsThemeSwitchCollection?.forEach((instance) => {
-				if (localStorage.getItem("hs_theme") === "auto") {
-					instance.element.setAppearance("auto", false);
+				if (localStorage.getItem('hs_theme') === 'auto') {
+					instance.element.setAppearance('auto', false);
 				}
 			});
 		};
 
 		window
-			.matchMedia("(prefers-color-scheme: dark)")
-			.addEventListener("change", HSThemeSwitch.systemThemeObserver);
+			.matchMedia('(prefers-color-scheme: dark)')
+			.addEventListener('change', HSThemeSwitch.systemThemeObserver);
 	}
 
 	private removeSystemThemeObserver() {
 		if (!HSThemeSwitch.systemThemeObserver) return;
 
 		window
-			.matchMedia("(prefers-color-scheme: dark)")
-			.removeEventListener("change", HSThemeSwitch.systemThemeObserver);
+			.matchMedia('(prefers-color-scheme: dark)')
+			.removeEventListener('change', HSThemeSwitch.systemThemeObserver);
 
 		HSThemeSwitch.systemThemeObserver = null;
 	}
 
 	private toggleObserveSystemTheme() {
-		if (localStorage.getItem("hs_theme") === "auto") {
+		if (localStorage.getItem('hs_theme') === 'auto') {
 			this.addSystemThemeObserver();
 		} else this.removeSystemThemeObserver();
 	}
@@ -130,24 +133,24 @@ class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> implements IThemeS
 		isSaveToLocalStorage = true,
 		isSetDispatchEvent = true,
 	) {
-		const html = document.querySelector("html");
+		const html = document.querySelector('html');
 		const resetStyles = this.setResetStyles();
 
-		if (isSaveToLocalStorage) localStorage.setItem("hs_theme", theme);
+		if (isSaveToLocalStorage) localStorage.setItem('hs_theme', theme);
 
 		let computedTheme = theme;
-		if (computedTheme === "default") computedTheme = "light";
+		if (computedTheme === 'default') computedTheme = 'light';
 
-		if (computedTheme === "auto") {
-			computedTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-				? "dark"
-				: "light";
+		if (computedTheme === 'auto') {
+			computedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+				? 'dark'
+				: 'light';
 		}
 
-		html.classList.remove("light", "dark", "default", "auto");
+		html.classList.remove('light', 'dark', 'default', 'auto');
 
-		if (theme === "auto") {
-			html.classList.add("auto", computedTheme);
+		if (theme === 'auto') {
+			html.classList.add('auto', computedTheme);
 		} else {
 			html.classList.add(computedTheme);
 		}
@@ -156,18 +159,18 @@ class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> implements IThemeS
 
 		if (isSetDispatchEvent) {
 			window.dispatchEvent(
-				new CustomEvent("on-hs-appearance-change", { detail: theme }),
+				new CustomEvent('on-hs-appearance-change', { detail: theme }),
 			);
 		}
 	}
 
 	public destroy() {
 		// Clear listeners
-		if (this.type === "change") {
-			this.el.removeEventListener("change", this.onElementChangeListener);
+		if (this.type === 'change') {
+			this.el.removeEventListener('change', this.onElementChangeListener);
 		}
-		if (this.type === "click") {
-			this.el.removeEventListener("click", this.onElementClickListener);
+		if (this.type === 'click') {
+			this.el.removeEventListener('click', this.onElementClickListener);
 		}
 
 		window.$hsThemeSwitchCollection = window.$hsThemeSwitchCollection.filter(
@@ -180,13 +183,13 @@ class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> implements IThemeS
 		const elInCollection = window.$hsThemeSwitchCollection.find(
 			(el) =>
 				el.element.el ===
-					(typeof target === "string"
-						? document.querySelector(target)
-						: target),
+				(typeof target === 'string' ? document.querySelector(target) : target),
 		);
 
 		return elInCollection
-			? isInstance ? elInCollection : elInCollection.element.el
+			? isInstance
+				? elInCollection
+				: elInCollection.element.el
 			: null;
 	}
 
@@ -200,20 +203,20 @@ class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> implements IThemeS
 		}
 
 		document
-			.querySelectorAll("[data-hs-theme-switch]:not(.--prevent-on-load-init)")
+			.querySelectorAll('[data-hs-theme-switch]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsThemeSwitchCollection.find(
 						(elC) => (elC?.element?.el as HTMLElement) === el,
 					)
 				) {
-					new HSThemeSwitch(el, { type: "change" });
+					new HSThemeSwitch(el, { type: 'change' });
 				}
 			});
 
 		document
 			.querySelectorAll(
-				"[data-hs-theme-click-value]:not(.--prevent-on-load-init)",
+				'[data-hs-theme-click-value]:not(.--prevent-on-load-init)',
 			)
 			.forEach((el: HTMLElement) => {
 				if (
@@ -221,7 +224,7 @@ class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> implements IThemeS
 						(elC) => (elC?.element?.el as HTMLElement) === el,
 					)
 				) {
-					new HSThemeSwitch(el, { type: "click" });
+					new HSThemeSwitch(el, { type: 'click' });
 				}
 			});
 	}

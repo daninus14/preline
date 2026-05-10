@@ -1,132 +1,144 @@
-import { afterTransition, getClassProperty } from "../utils";
+import { afterTransition, getClassProperty } from '../utils';
 
-import HSCopyMarkup from "../plugins/copy-markup/core";
-import HSAccordion from "../plugins/accordion/core";
-import HSCarousel from "../plugins/carousel/core";
-import HSCollapse from "../plugins/collapse/core";
-import HSComboBox from "../plugins/combobox/core";
-import HSDataTable from "../plugins/datatable/core";
-import HSDatepicker from "../plugins/datepicker/core";
-import HSDropdown from "../plugins/dropdown/core";
-import HSFileUpload from "../plugins/file-upload/core";
-import HSInputNumber from "../plugins/input-number/core";
-import HSLayoutSplitter from "../plugins/layout-splitter/core";
-import HSOverlay from "../plugins/overlay/core";
-import HSPinInput from "../plugins/pin-input/core";
-import HSRangeSlider from "../plugins/range-slider/core";
-import HSRemoveElement from "../plugins/remove-element/core";
-import HSScrollNav from "../plugins/scroll-nav/core";
-import HSScrollspy from "../plugins/scrollspy/core";
-import HSSelect from "../plugins/select/core";
-import HSStepper from "../plugins/stepper/core";
-import HSStrongPassword from "../plugins/strong-password/core";
-import HSTabs from "../plugins/tabs/core";
-import HSTextareaAutoHeight from "../plugins/textarea-auto-height/core";
-import HSThemeSwitch from "../plugins/theme-switch/core";
-import HSToggleCount from "../plugins/toggle-count/core";
-import HSTogglePassword from "../plugins/toggle-password/core";
-import HSTooltip from "../plugins/tooltip/core";
-import HSTreeView from "../plugins/tree-view/core";
+import HSCopyMarkup from '../plugins/copy-markup/core';
+import HSAccordion from '../plugins/accordion/core';
+import HSCarousel from '../plugins/carousel/core';
+import HSCollapse from '../plugins/collapse/core';
+import HSComboBox from '../plugins/combobox/core';
+import HSDataTable from '../plugins/datatable/core';
+import HSDatepicker from '../plugins/datepicker/core';
+import HSDropdown from '../plugins/dropdown/core';
+import HSFileUpload from '../plugins/file-upload/core';
+import HSInputNumber from '../plugins/input-number/core';
+import HSLayoutSplitter from '../plugins/layout-splitter/core';
+import HSOverlay from '../plugins/overlay/core';
+import HSPinInput from '../plugins/pin-input/core';
+import HSRangeSlider from '../plugins/range-slider/core';
+import HSRemoveElement from '../plugins/remove-element/core';
+import HSScrollNav from '../plugins/scroll-nav/core';
+import HSScrollspy from '../plugins/scrollspy/core';
+import HSSelect from '../plugins/select/core';
+import HSStepper from '../plugins/stepper/core';
+import HSStrongPassword from '../plugins/strong-password/core';
+import HSTabs from '../plugins/tabs/core';
+import HSTextareaAutoHeight from '../plugins/textarea-auto-height/core';
+import HSThemeSwitch from '../plugins/theme-switch/core';
+import HSToggleCount from '../plugins/toggle-count/core';
+import HSTogglePassword from '../plugins/toggle-password/core';
+import HSTooltip from '../plugins/tooltip/core';
+import HSTreeView from '../plugins/tree-view/core';
 
-import { TCollectionItem } from "./types";
+import { TCollectionItem } from './types';
 
 const getGlobal = () => globalThis as any;
 const isDataTableAvailable = () => {
 	const g = getGlobal();
 
-	return typeof g.DataTable !== "undefined" && typeof g.jQuery !== "undefined";
+	return typeof g.DataTable !== 'undefined' && typeof g.jQuery !== 'undefined';
 };
 const isFileUploadAvailable = () => {
 	const g = getGlobal();
 
-	return typeof g._ !== "undefined" && typeof g.Dropzone !== "undefined";
+	return typeof g._ !== 'undefined' && typeof g.Dropzone !== 'undefined';
 };
 const isRangeSliderAvailable = () => {
 	const g = getGlobal();
 
-	return typeof g.noUiSlider !== "undefined";
+	return typeof g.noUiSlider !== 'undefined';
 };
 const isDatepickerAvailable = () => {
 	const g = getGlobal();
 
-	return typeof g.VanillaCalendarPro !== "undefined";
+	return typeof g.VanillaCalendarPro !== 'undefined';
 };
 
 export const COLLECTIONS: TCollectionItem[] = [
-	{ key: "copy-markup", fn: HSCopyMarkup, collection: "$hsCopyMarkupCollection" },
-	{ key: "accordion", fn: HSAccordion, collection: "$hsAccordionCollection" },
-	{ key: "carousel", fn: HSCarousel, collection: "$hsCarouselCollection" },
-	{ key: "collapse", fn: HSCollapse, collection: "$hsCollapseCollection" },
-	{ key: "combobox", fn: HSComboBox, collection: "$hsComboBoxCollection" },
 	{
-		key: "datatable",
+		key: 'copy-markup',
+		fn: HSCopyMarkup,
+		collection: '$hsCopyMarkupCollection',
+	},
+	{ key: 'accordion', fn: HSAccordion, collection: '$hsAccordionCollection' },
+	{ key: 'carousel', fn: HSCarousel, collection: '$hsCarouselCollection' },
+	{ key: 'collapse', fn: HSCollapse, collection: '$hsCollapseCollection' },
+	{ key: 'combobox', fn: HSComboBox, collection: '$hsComboBoxCollection' },
+	{
+		key: 'datatable',
 		fn: isDataTableAvailable() ? HSDataTable : null,
-		collection: "$hsDataTableCollection",
+		collection: '$hsDataTableCollection',
 	},
 	{
-		key: "datepicker",
+		key: 'datepicker',
 		fn: isDatepickerAvailable() ? HSDatepicker : null,
-		collection: "$hsDatepickerCollection",
+		collection: '$hsDatepickerCollection',
 	},
-	{ key: "dropdown", fn: HSDropdown, collection: "$hsDropdownCollection" },
+	{ key: 'dropdown', fn: HSDropdown, collection: '$hsDropdownCollection' },
 	{
-		key: "file-upload",
+		key: 'file-upload',
 		fn: isFileUploadAvailable() ? HSFileUpload : null,
-		collection: "$hsFileUploadCollection",
+		collection: '$hsFileUploadCollection',
 	},
-	{ key: "input-number", fn: HSInputNumber, collection: "$hsInputNumberCollection" },
 	{
-		key: "layout-splitter",
+		key: 'input-number',
+		fn: HSInputNumber,
+		collection: '$hsInputNumberCollection',
+	},
+	{
+		key: 'layout-splitter',
 		fn: HSLayoutSplitter,
-		collection: "$hsLayoutSplitterCollection",
+		collection: '$hsLayoutSplitterCollection',
 	},
-	{ key: "overlay", fn: HSOverlay, collection: "$hsOverlayCollection" },
-	{ key: "pin-input", fn: HSPinInput, collection: "$hsPinInputCollection" },
+	{ key: 'overlay', fn: HSOverlay, collection: '$hsOverlayCollection' },
+	{ key: 'pin-input', fn: HSPinInput, collection: '$hsPinInputCollection' },
 	{
-		key: "range-slider",
+		key: 'range-slider',
 		fn: isRangeSliderAvailable() ? HSRangeSlider : null,
-		collection: "$hsRangeSliderCollection",
+		collection: '$hsRangeSliderCollection',
 	},
 	{
-		key: "remove-element",
+		key: 'remove-element',
 		fn: HSRemoveElement,
-		collection: "$hsRemoveElementCollection",
+		collection: '$hsRemoveElementCollection',
 	},
-	{ key: "scroll-nav", fn: HSScrollNav, collection: "$hsScrollNavCollection" },
-	{ key: "scrollspy", fn: HSScrollspy, collection: "$hsScrollspyCollection" },
-	{ key: "select", fn: HSSelect, collection: "$hsSelectCollection" },
-	{ key: "stepper", fn: HSStepper, collection: "$hsStepperCollection" },
+	{ key: 'scroll-nav', fn: HSScrollNav, collection: '$hsScrollNavCollection' },
+	{ key: 'scrollspy', fn: HSScrollspy, collection: '$hsScrollspyCollection' },
+	{ key: 'select', fn: HSSelect, collection: '$hsSelectCollection' },
+	{ key: 'stepper', fn: HSStepper, collection: '$hsStepperCollection' },
 	{
-		key: "strong-password",
+		key: 'strong-password',
 		fn: HSStrongPassword,
-		collection: "$hsStrongPasswordCollection",
+		collection: '$hsStrongPasswordCollection',
 	},
-	{ key: "tabs", fn: HSTabs, collection: "$hsTabsCollection" },
+	{ key: 'tabs', fn: HSTabs, collection: '$hsTabsCollection' },
 	{
-		key: "textarea-auto-height",
+		key: 'textarea-auto-height',
 		fn: HSTextareaAutoHeight,
-		collection: "$hsTextareaAutoHeightCollection",
+		collection: '$hsTextareaAutoHeightCollection',
 	},
 	{
-		key: "theme-switch",
+		key: 'theme-switch',
 		fn: HSThemeSwitch,
-		collection: "$hsThemeSwitchCollection",
+		collection: '$hsThemeSwitchCollection',
 	},
-	{ key: "toggle-count", fn: HSToggleCount, collection: "$hsToggleCountCollection" },
 	{
-		key: "toggle-password",
-		fn: HSTogglePassword,
-		collection: "$hsTogglePasswordCollection",
+		key: 'toggle-count',
+		fn: HSToggleCount,
+		collection: '$hsToggleCountCollection',
 	},
-	{ key: "tooltip", fn: HSTooltip, collection: "$hsTooltipCollection" },
-	{ key: "tree-view", fn: HSTreeView, collection: "$hsTreeViewCollection" },
+	{
+		key: 'toggle-password',
+		fn: HSTogglePassword,
+		collection: '$hsTogglePasswordCollection',
+	},
+	{ key: 'tooltip', fn: HSTooltip, collection: '$hsTooltipCollection' },
+	{ key: 'tree-view', fn: HSTreeView, collection: '$hsTreeViewCollection' },
 ];
 
 export const HSStaticMethods = {
 	getClassProperty,
 	afterTransition,
-	autoInit(collection: string | string[] = "all") {
-		if (collection === "all") {
+	autoInit(collection: string | string[] = 'all') {
+		if (collection === 'all') {
 			COLLECTIONS.forEach(({ fn }) => {
 				fn?.autoInit?.();
 			});
@@ -140,10 +152,10 @@ export const HSStaticMethods = {
 			if (target.includes(key)) fn?.autoInit?.();
 		});
 	},
-	cleanCollection(name: string | string[] = "all") {
-		if (typeof window === "undefined") return;
+	cleanCollection(name: string | string[] = 'all') {
+		if (typeof window === 'undefined') return;
 
-		if (name === "all") {
+		if (name === 'all') {
 			COLLECTIONS.forEach(({ collection }) => {
 				if ((window as any)[collection] instanceof Array) {
 					(window as any)[collection] = [];
@@ -156,7 +168,10 @@ export const HSStaticMethods = {
 		const target = Array.isArray(name) ? name : [name];
 
 		COLLECTIONS.forEach(({ key, collection }) => {
-			if (target.includes(key) && (window as any)[collection] instanceof Array) {
+			if (
+				target.includes(key) &&
+				(window as any)[collection] instanceof Array
+			) {
 				(window as any)[collection] = [];
 			}
 		});

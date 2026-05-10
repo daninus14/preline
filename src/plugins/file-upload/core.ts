@@ -1,6 +1,6 @@
 /*
  * HSFileUpload
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -19,7 +19,10 @@ declare var Dropzone: any;
 
 if (typeof Dropzone !== 'undefined') Dropzone.autoDiscover = false;
 
-class HSFileUpload extends HSBasePlugin<IFileUploadOptions> implements IFileUpload {
+class HSFileUpload
+	extends HSBasePlugin<IFileUploadOptions>
+	implements IFileUpload
+{
 	private concatOptions: IFileUploadOptions;
 	private previewTemplate: string;
 	private extensions: any = {};

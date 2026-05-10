@@ -19,13 +19,19 @@ const pluginEntries = fs
 		const pluginDir = path.join(pluginsDir, pluginName);
 		if (!fs.lstatSync(pluginDir).isDirectory()) return false;
 
-		return fs.existsSync(path.join(pluginDir, 'core.ts')) || fs.existsSync(path.join(pluginDir, 'index.ts'));
+		return (
+			fs.existsSync(path.join(pluginDir, 'auto.ts')) ||
+			fs.existsSync(path.join(pluginDir, 'core.ts'))
+		);
 	})
 	.reduce((acc, pluginName) => {
 		const pluginDir = path.join(pluginsDir, pluginName);
-		const entryFile = fs.existsSync(path.join(pluginDir, 'core.ts')) ? 'core.ts' : 'index.ts';
 
-		acc[pluginName] = `./src/plugins/${pluginName}/${entryFile}`;
+		if (fs.existsSync(path.join(pluginDir, 'auto.ts')))
+			acc[pluginName] = `./src/plugins/${pluginName}/auto.ts`;
+
+		if (fs.existsSync(path.join(pluginDir, 'core.ts')))
+			acc[`${pluginName}-non-auto`] = `./src/plugins/${pluginName}/core.ts`;
 
 		return acc;
 	}, {});
@@ -48,8 +54,8 @@ module.exports = {
 	resolve: {
 		extensions: ['.ts', '.js'],
 		alias: {
-			'VanillaCalendarPro': 'vanilla-calendar-pro'
-		}
+			VanillaCalendarPro: 'vanilla-calendar-pro',
+		},
 	},
 	output: {
 		path: path.resolve(__dirname, 'dist'),
@@ -64,7 +70,7 @@ module.exports = {
 		dropzone: 'Dropzone',
 		clipboard: 'ClipboardJS',
 		noUiSlider: 'noUiSlider',
-		VanillaCalendarPro: 'VanillaCalendarPro'
+		VanillaCalendarPro: 'VanillaCalendarPro',
 	},
 	optimization: {
 		minimize: true,

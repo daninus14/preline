@@ -40,7 +40,10 @@ const config = {
 
 function writeFile(dir, plugin, prefix = '') {
 	const pluginDir = `${dir}/${plugin}`;
-	if (!fs.lstatSync(pluginDir).isDirectory() || excludePlugins.includes(plugin)) {
+	if (
+		!fs.lstatSync(pluginDir).isDirectory() ||
+		excludePlugins.includes(plugin)
+	) {
 		return null;
 	}
 

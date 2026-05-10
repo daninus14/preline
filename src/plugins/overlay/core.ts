@@ -1,6 +1,6 @@
 /*
  * HSOverlay
- * @version: 4.1.3
+ * @version: 4.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -10,7 +10,6 @@ import {
 	afterTransition,
 	dispatch,
 	getClassProperty,
-	isDirectChild,
 	stringToBoolean,
 } from '../../utils';
 
@@ -35,6 +34,8 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private readonly backdropParent: string | HTMLElement | Document;
 	private readonly backdropExtraClasses: string | null;
 	private readonly animationTarget: HTMLElement | null;
+	private readonly isScrollInsideViewport: boolean;
+	private onScrollInsideViewportClickListener: ((e: MouseEvent) => void) | null;
 
 	private openNextOverlay: boolean;
 	private autoHide: ReturnType<typeof setTimeout> | null;
@@ -54,6 +55,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	public autoClose: number | null;
 	public autoCloseEqualityType: TOverlayOptionsAutoCloseEqualityType | null;
 	public moveOverlayToBody: number | null;
+	public isToggleClassesImmediately: boolean;
 
 	private backdrop: HTMLElement | null;
 	private initialZIndex = 0;
@@ -76,6 +78,10 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 
 	constructor(el: HTMLElement, options?: IOverlayOptions, events?: {}) {
 		super(el, options, events);
+
+		if (!window.$hsOverlayCollection) {
+			window.$hsOverlayCollection = [];
+		}
 
 		// Collect all data options from toggles
 		this.toggleButtons = Array.from(
@@ -107,6 +113,12 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 				: document.body;
 		this.backdropExtraClasses = concatOptions?.backdropExtraClasses ?? '';
 		this.moveOverlayToBody = concatOptions?.moveOverlayToBody || null;
+		this.isToggleClassesImmediately =
+			concatOptions?.isToggleClassesImmediately ??
+			stringToBoolean(
+				getClassProperty(this.el, '--toggle-classes-immediately', 'false') ||
+					'false',
+			);
 
 		this.openNextOverlay = false;
 		this.autoHide = null;
@@ -131,6 +143,10 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		this.hasAbilityToCloseOnBackdropClick = stringToBoolean(
 			this.el.getAttribute('data-hs-overlay-keyboard') || 'true',
 		);
+		this.isScrollInsideViewport =
+			getClassProperty(this.el, '--overlay-scroll-behavior') ===
+			'inside-viewport';
+		this.onScrollInsideViewportClickListener = null;
 
 		const autoCloseBreakpoint = getClassProperty(this.el, '--auto-close');
 		const autoCloseEqualityType = getClassProperty(
@@ -158,9 +174,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		this.onElementClickListener = [];
 		this.onElementMinifierClickListener = [];
 
-		this.initiallyOpened = document.body.classList.contains(
-			'hs-overlay-body-open',
-		);
+		this.initiallyOpened = this.isOpened();
 
 		this.init();
 	}
@@ -212,7 +226,8 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private overlayClick(evt: Event) {
 		if (
 			(evt.target as HTMLElement).id &&
-			`#${(evt.target as HTMLElement).id}` === this.el.id &&
+			(evt.target as HTMLElement).id === this.el.id &&
+			// `#${(evt.target as HTMLElement).id}` === this.el.id &&
 			this.isCloseWhenClickInside &&
 			this.hasAbilityToCloseOnBackdropClick
 		) {
@@ -467,6 +482,10 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 
 	// Public methods
 	public open(cb: Function | null = null) {
+		if (!window.$hsOverlayCollection) {
+			window.$hsOverlayCollection = [];
+		}
+
 		if (this.el.classList.contains('minified')) {
 			this.minify(false);
 		}
@@ -523,7 +542,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		this.el.setAttribute('aria-overlay', 'true');
 		this.el.setAttribute('tabindex', '-1');
 
-		setTimeout(() => {
+		const openFn = () => {
 			if (this.el.classList.contains('opened')) return false;
 
 			this.el.classList.add('open', 'opened');
@@ -531,8 +550,8 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 				document.body.classList.add('hs-overlay-body-open');
 			}
 
-			if (!this.initiallyOpened) {
-				this.el.focus();
+			if (!this.initiallyOpened && this.hasAutofocus) {
+				this.el.focus({ preventScroll: true });
 
 				this.el.style.outline = 'none';
 			}
@@ -552,11 +571,31 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 
 			if (typeof cb === 'function') cb();
 
+			if (this.isScrollInsideViewport) {
+				this.el.style.pointerEvents = 'auto';
+				this.onScrollInsideViewportClickListener = (e: MouseEvent) => {
+					if (e.target === this.el && this.hasAbilityToCloseOnBackdropClick) {
+						this.close();
+					}
+				};
+				this.el.addEventListener(
+					'click',
+					this.onScrollInsideViewportClickListener,
+				);
+			}
+
 			if (this.isElementVisible()) HSOverlay.openedItemsQty++;
-		}, 50);
+		};
+
+		if (this.isToggleClassesImmediately) openFn();
+		else setTimeout(openFn, 50);
 	}
 
 	public close(forceClose = false, cb: Function | null = null) {
+		if (!window.$hsOverlayCollection) {
+			window.$hsOverlayCollection = [];
+		}
+
 		if (this.isElementVisible()) {
 			HSOverlay.openedItemsQty =
 				HSOverlay.openedItemsQty <= 0 ? 0 : HSOverlay.openedItemsQty - 1;
@@ -590,7 +629,13 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 				);
 			}
 
-			if (!document.querySelector('.hs-overlay.opened')) {
+			const hasOpenedOverlays = window.$hsOverlayCollection.some(
+				(overlay) =>
+					overlay.element.el.classList.contains('opened') &&
+					!overlay.element.isLayoutAffect,
+			);
+
+			if (!hasOpenedOverlays) {
 				document.body.style.overflow = '';
 				if (this.emulateScrollbarSpace) document.body.style.paddingRight = '';
 			}
@@ -627,7 +672,20 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 
 			this.el.style.outline = '';
 
-			if (forceClose) closeFn(resolve);
+			if (this.isScrollInsideViewport) {
+				this.el.style.pointerEvents = '';
+
+				if (this.onScrollInsideViewportClickListener) {
+					this.el.removeEventListener(
+						'click',
+						this.onScrollInsideViewportClickListener,
+					);
+
+					this.onScrollInsideViewportClickListener = null;
+				}
+			}
+
+			if (forceClose || this.isToggleClassesImmediately) closeFn(resolve);
 			else afterTransition(this.animationTarget, () => closeFn(resolve));
 		});
 	}
@@ -658,6 +716,8 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	}
 
 	public destroy() {
+		if (!window.$hsOverlayCollection) return;
+
 		// Remove classes
 		this.el.classList.remove('open', 'opened', this.hiddenClass);
 		if (this.isLayoutAffect) {
@@ -681,6 +741,15 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 			this.backdrop = null;
 		}
 
+		if (this.onScrollInsideViewportClickListener) {
+			this.el.removeEventListener(
+				'click',
+				this.onScrollInsideViewportClickListener,
+			);
+
+			this.onScrollInsideViewportClickListener = null;
+		}
+
 		window.$hsOverlayCollection = window.$hsOverlayCollection.filter(
 			({ element }) => element.el !== this.el,
 		);
@@ -690,6 +759,8 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private static findInCollection(
 		target: HSOverlay | HTMLElement | string,
 	): ICollectionItem<HSOverlay> | null {
+		if (!window.$hsOverlayCollection) return null;
+
 		return (
 			window.$hsOverlayCollection.find((el) => {
 				if (target instanceof HSOverlay) return el.element.el === target.el;
@@ -862,6 +933,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 				{
 					onEnter: () => {
 						if (!this.isOpened()) this.open();
+						else this.close();
 					},
 					onEsc: () => {
 						if (this.isOpened() && this.hasAbilityToCloseOnBackdropClick) {

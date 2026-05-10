@@ -1,9 +1,9 @@
-import HSScrollNav from "./core";
+import HSScrollNav from './core';
 
 window.addEventListener('load', () => {
-  HSScrollNav.autoInit();
+	HSScrollNav.autoInit();
 });
 
 if (typeof window !== 'undefined') {
-  window.HSScrollNav = HSScrollNav;
+	window.HSScrollNav = HSScrollNav;
 }

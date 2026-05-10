@@ -1,9 +1,9 @@
-import HSDatepicker from "./core";
+import HSDatepicker from './core';
 
 window.addEventListener('load', () => {
-  HSDatepicker.autoInit()
+	HSDatepicker.autoInit();
 });
 
 if (typeof window !== 'undefined') {
-  window.HSDatepicker = HSDatepicker;
+	window.HSDatepicker = HSDatepicker;
 }
